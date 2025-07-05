@@ -3,6 +3,9 @@ import { useState, useCallback } from 'react';
 import { SimulationEngine } from './SimulationEngine';
 import { ParameterPanel } from './ParameterPanel';
 import { DataLogger } from './DataLogger';
+import { HeaderSection } from './HeaderSection';
+import { FooterSection } from './FooterSection';
+import { MetricsPanel } from './MetricsPanel';
 import { toast } from 'sonner';
 import { TemporalLattice } from './TemporalLattice';
 import { OntologicalCore } from './OntologicalCore';
@@ -169,38 +172,7 @@ export const Vers3Vector = () => {
 
   return (
     <div className="min-h-screen bg-background font-scientific">
-      {/* Header */}
-      <div className="border-b border-border/50 bg-card/30 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3">
-                <img 
-                  src="/lovable-uploads/da1c990c-f138-42e2-bf8a-7774d65f3410.png" 
-                  alt="Vers3Vector Logo"
-                  className="w-8 h-8 rounded-full"
-                />
-                <h1 className="text-xl font-bold text-primary">VERS3VECTOR</h1>
-              </div>
-              <div className="text-xs text-muted-foreground font-mono">
-                Temporal Lattice | Causal Engine | Ontological Core | v4.2.1
-              </div>
-            </div>
-            <div className="flex items-center gap-2 text-xs font-mono">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-success animate-pulse"></div>
-                <span className="text-success">SYSTEM ACTIVE</span>
-              </div>
-              {encryptedMode && (
-                <div className="flex items-center gap-2 ml-4">
-                  <div className="w-2 h-2 rounded-full bg-warning"></div>
-                  <span className="text-warning">CLASSIFIED</span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+      <HeaderSection encryptedMode={encryptedMode} />
 
       {/* Main Interface */}
       <div className="container mx-auto p-4 h-[calc(100vh-80px)]">
@@ -218,7 +190,6 @@ export const Vers3Vector = () => {
               onToggleEncryption={handleToggleEncryption}
             />
             
-            {/* Hardware Interface */}
             <HardwareInterface
               onSensorData={handleHardwareData}
               isActive={true}
@@ -255,87 +226,23 @@ export const Vers3Vector = () => {
               isActive={true}
             />
 
-            {/* Ontological Core */}
             <OntologicalCore
               fieldData={fieldParameters}
               temporalEvents={temporalEvents}
               isActive={true}
             />
 
-            {/* Advanced Metrics Panel */}
-            <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg p-4">
-              <h3 className="text-sm font-scientific text-primary mb-3">TEMPORAL METRICS</h3>
-              <div className="grid grid-cols-1 gap-2 text-xs font-mono">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Timeline Branches</span>
-                  <span className="text-accent">{Math.floor(temporalSettings.branchingProbability * 10)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Causal Loops</span>
-                  <span className="text-resonance-root">{causalData?.loopCount || 0}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Anomaly Zones</span>
-                  <span className="text-warning">{anomalyZones.length}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Retrocausal Energy</span>
-                  <span className="text-tensor-overlay">{causalData?.retrocausalEnergy?.toFixed(2) || '0.00'}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Hardware Sensors</span>
-                  <span className="text-vector-field">{hardwareData ? 'ACTIVE' : 'SIMULATED'}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* System Status */}
-            <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg p-4">
-              <h3 className="text-sm font-scientific text-primary mb-3">SYSTEM STATUS</h3>
-              <div className="space-y-2 text-xs font-mono">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">GPU Acceleration</span>
-                  <span className="text-success">ACTIVE</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Render Pipeline</span>
-                  <span className="text-success">OPTIMAL</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Memory Usage</span>
-                  <span className="text-warning">847MB</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Frame Rate</span>
-                  <span className="text-success">60.0 FPS</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Precision Mode</span>
-                  <span className="text-accent">DOUBLE</span>
-                </div>
-              </div>
-            </div>
+            <MetricsPanel
+              temporalSettings={temporalSettings}
+              causalData={causalData}
+              anomalyZones={anomalyZones}
+              hardwareData={hardwareData}
+            />
           </div>
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="border-t border-border/30 bg-card/20 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-2">
-          <div className="flex items-center justify-between text-xs font-mono text-muted-foreground">
-            <div>
-              © 2024 Advanced Theoretical Physics Research Division
-            </div>
-            <div className="flex items-center gap-4">
-              <span>Riemann-Cartan Framework</span>
-              <span>|</span>
-              <span>Dynamic Resonance Rooting</span>
-              <span>|</span>
-              <span>Classified Research Tool</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <FooterSection />
     </div>
   );
 };
