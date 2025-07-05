@@ -3,6 +3,10 @@ import { SimulationEngine } from './SimulationEngine';
 import { ParameterPanel } from './ParameterPanel';
 import { DataLogger } from './DataLogger';
 import { toast } from 'sonner';
+import { TemporalLattice } from './TemporalLattice';
+import { OntologicalCore } from './OntologicalCore';
+import { CausalEngine } from './CausalEngine';
+import { HardwareInterface } from './HardwareInterface';
 
 export const Vers3Vector = () => {
   const [fieldParameters, setFieldParameters] = useState({
@@ -25,6 +29,27 @@ export const Vers3Vector = () => {
   });
 
   const [encryptedMode, setEncryptedMode] = useState(false);
+
+  const [temporalSettings, setTemporalSettings] = useState({
+    branchingProbability: 0.1,
+    decoherenceRate: 0.05,
+    retrocausalStrength: 0.3
+  });
+
+  const [causalSettings, setCausalSettings] = useState({
+    retrocausalStrength: 0.4,
+    loopStability: 0.6,
+    anomalyDensity: 0.2
+  });
+
+  const [hardwareData, setHardwareData] = useState<any>(null);
+  const [temporalEvents, setTemporalEvents] = useState<any[]>([]);
+  const [causalData, setCausalData] = useState<any>(null);
+  const [anomalyZones, setAnomalyZones] = useState<any[]>([
+    { x: 5, y: 0, z: 2 },
+    { x: -3, y: 4, z: -1 },
+    { x: 0, y: -6, z: 3 }
+  ]);
 
   const handleParameterChange = useCallback((param: string, value: number) => {
     setFieldParameters(prev => ({
@@ -101,6 +126,46 @@ export const Vers3Vector = () => {
     );
   }, [encryptedMode]);
 
+  const handleTemporalParameterChange = useCallback((param: string, value: number) => {
+    setTemporalSettings(prev => ({
+      ...prev,
+      [param]: value
+    }));
+    
+    toast.info(`Temporal parameter updated: ${param} = ${value.toFixed(3)}`, {
+      duration: 2000,
+      className: 'font-scientific text-xs'
+    });
+  }, []);
+
+  const handleHardwareData = useCallback((data: any) => {
+    setHardwareData(data);
+    
+    // Inject hardware data into field parameters
+    if (data.magnetometer) {
+      const magneticInfluence = data.magnetometer.magnitude * 0.01;
+      setFieldParameters(prev => ({
+        ...prev,
+        emFieldTorsion: Math.min(2.0, Math.max(0.0, prev.emFieldTorsion + magneticInfluence))
+      }));
+    }
+  }, []);
+
+  const handleCausalDataUpdate = useCallback((data: any) => {
+    setCausalData(data);
+    
+    // Generate temporal events from causal data
+    if (data.anomalyCount > 0) {
+      const newEvent = {
+        id: `event-${Date.now()}`,
+        type: 'causal_anomaly',
+        magnitude: data.averageStrength,
+        timestamp: Date.now()
+      };
+      setTemporalEvents(prev => [...prev, newEvent].slice(-20));
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-background font-scientific">
       {/* Header */}
@@ -110,7 +175,7 @@ export const Vers3Vector = () => {
             <div className="flex items-center gap-4">
               <h1 className="text-xl font-bold text-primary">VERS3VECTOR</h1>
               <div className="text-xs text-muted-foreground font-mono">
-                Chrono-Spatial Displacement Analysis | v3.7.2
+                Temporal Lattice | Causal Engine | Ontological Core | v4.2.1
               </div>
             </div>
             <div className="flex items-center gap-2 text-xs font-mono">
@@ -133,7 +198,7 @@ export const Vers3Vector = () => {
       <div className="container mx-auto p-4 h-[calc(100vh-80px)]">
         <div className="grid grid-cols-12 gap-4 h-full">
           {/* Parameter Control Panel */}
-          <div className="col-span-3">
+          <div className="col-span-3 space-y-4">
             <ParameterPanel
               fieldParameters={fieldParameters}
               tensorOverlays={tensorOverlays}
@@ -144,6 +209,12 @@ export const Vers3Vector = () => {
               onExport={handleExport}
               onToggleEncryption={handleToggleEncryption}
             />
+            
+            {/* Hardware Interface */}
+            <HardwareInterface
+              onSensorData={handleHardwareData}
+              isActive={true}
+            />
           </div>
 
           {/* Main Simulation Engine */}
@@ -152,43 +223,60 @@ export const Vers3Vector = () => {
               fieldParameters={fieldParameters}
               tensorOverlays={tensorOverlays}
               drrSettings={drrSettings}
+              renderExtensions={(
+                <>
+                  <TemporalLattice
+                    fieldParameters={fieldParameters}
+                    causalParameters={temporalSettings}
+                    anomalyZones={anomalyZones}
+                  />
+                  <CausalEngine
+                    fieldParameters={fieldParameters}
+                    causalSettings={causalSettings}
+                    onCausalDataUpdate={handleCausalDataUpdate}
+                  />
+                </>
+              )}
             />
           </div>
 
-          {/* Right Panel - Data Logger and Additional Controls */}
+          {/* Right Panel - Extended Analytics */}
           <div className="col-span-3 space-y-4">
             <DataLogger
               fieldParameters={fieldParameters}
               isActive={true}
             />
 
-            {/* Quick Stats Panel */}
+            {/* Ontological Core */}
+            <OntologicalCore
+              fieldData={fieldParameters}
+              temporalEvents={temporalEvents}
+              isActive={true}
+            />
+
+            {/* Advanced Metrics Panel */}
             <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg p-4">
-              <h3 className="text-sm font-scientific text-primary mb-3">FIELD METRICS</h3>
-              <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                <div className="text-center p-2 bg-muted/30 rounded">
-                  <div className="text-vector-field">VECTORS</div>
-                  <div className="text-lg font-bold text-foreground">
-                    {Math.floor(512 * fieldParameters.energyDensity)}
-                  </div>
+              <h3 className="text-sm font-scientific text-primary mb-3">TEMPORAL METRICS</h3>
+              <div className="grid grid-cols-1 gap-2 text-xs font-mono">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Timeline Branches</span>
+                  <span className="text-accent">{Math.floor(temporalSettings.branchingProbability * 10)}</span>
                 </div>
-                <div className="text-center p-2 bg-muted/30 rounded">
-                  <div className="text-tensor-overlay">TENSORS</div>
-                  <div className="text-lg font-bold text-foreground">
-                    {Object.values(tensorOverlays).filter(Boolean).length}
-                  </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Causal Loops</span>
+                  <span className="text-resonance-root">{causalData?.loopCount || 0}</span>
                 </div>
-                <div className="text-center p-2 bg-muted/30 rounded">
-                  <div className="text-resonance-root">ROOTS</div>
-                  <div className="text-lg font-bold text-foreground">
-                    {drrSettings.resonanceRoots ? Math.floor(4 + fieldParameters.energyDensity * 8) : 0}
-                  </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Anomaly Zones</span>
+                  <span className="text-warning">{anomalyZones.length}</span>
                 </div>
-                <div className="text-center p-2 bg-muted/30 rounded">
-                  <div className="text-accent">SYNC</div>
-                  <div className="text-lg font-bold text-foreground">
-                    {(fieldParameters.timeSync * 60).toFixed(0)}Hz
-                  </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Retrocausal Energy</span>
+                  <span className="text-tensor-overlay">{causalData?.retrocausalEnergy?.toFixed(2) || '0.00'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Hardware Sensors</span>
+                  <span className="text-vector-field">{hardwareData ? 'ACTIVE' : 'SIMULATED'}</span>
                 </div>
               </div>
             </div>

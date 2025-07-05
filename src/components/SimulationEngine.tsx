@@ -25,12 +25,14 @@ interface SimulationEngineProps {
     adaptiveAnchors: boolean;
     phaseTracking: boolean;
   };
+  renderExtensions?: React.ReactNode;
 }
 
 export const SimulationEngine = ({ 
   fieldParameters, 
   tensorOverlays, 
-  drrSettings 
+  drrSettings,
+  renderExtensions 
 }: SimulationEngineProps) => {
   const groupRef = useRef<Group>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -133,6 +135,9 @@ export const SimulationEngine = ({
                   fieldStrength={fieldParameters.energyDensity}
                 />
               )}
+
+              {/* Extended render components */}
+              {renderExtensions}
             </group>
 
             {/* Orbital controls for navigation */}
