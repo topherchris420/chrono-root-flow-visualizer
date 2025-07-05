@@ -8,89 +8,83 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* DARPA-grade research interface - dark scientific theme */
+    --background: 218 19% 6%;
+    --foreground: 180 100% 88%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 220 15% 8%;
+    --card-foreground: 180 100% 88%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 220 15% 8%;
+    --popover-foreground: 180 100% 88%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 186 100% 60%;
+    --primary-foreground: 218 19% 6%;
+    --primary-glow: 186 100% 75%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 15% 12%;
+    --secondary-foreground: 180 80% 75%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 15% 10%;
+    --muted-foreground: 180 30% 50%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 276 100% 65%;
+    --accent-foreground: 218 19% 6%;
+    --accent-glow: 276 100% 80%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 100% 65%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --warning: 45 100% 60%;
+    --warning-foreground: 218 19% 6%;
 
-    --radius: 0.5rem;
+    --success: 142 100% 55%;
+    --success-foreground: 218 19% 6%;
 
-    --sidebar-background: 0 0% 98%;
+    --border: 220 15% 15%;
+    --input: 220 15% 12%;
+    --ring: 186 100% 60%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --radius: 0.25rem;
 
-    --sidebar-primary: 240 5.9% 10%;
+    /* Scientific visualization colors */
+    --vector-field: 186 100% 60%;
+    --tensor-overlay: 276 100% 65%;
+    --resonance-root: 45 100% 60%;
+    --curvature-tensor: 0 100% 65%;
+    --torsion-field: 142 100% 55%;
 
-    --sidebar-primary-foreground: 0 0% 98%;
+    /* Gradients for spatial depth */
+    --gradient-primary: linear-gradient(135deg, hsl(186 100% 60%), hsl(276 100% 65%));
+    --gradient-field: linear-gradient(180deg, hsl(218 19% 8%), hsl(218 19% 4%));
+    --gradient-resonance: radial-gradient(circle, hsl(45 100% 60% / 0.3), transparent 70%);
 
-    --sidebar-accent: 240 4.8% 95.9%;
+    /* Precision UI shadows */
+    --shadow-field: 0 0 20px hsl(186 100% 60% / 0.2);
+    --shadow-tensor: 0 0 15px hsl(276 100% 65% / 0.3);
+    --shadow-glow: 0 0 30px hsl(186 100% 60% / 0.1);
 
-    --sidebar-accent-foreground: 240 5.9% 10%;
+    /* Animation timing */
+    --transition-field: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-tensor: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 220 15% 8%;
+    --sidebar-foreground: 180 80% 75%;
+    --sidebar-primary: 186 100% 60%;
+    --sidebar-primary-foreground: 218 19% 6%;
+    --sidebar-accent: 220 15% 12%;
+    --sidebar-accent-foreground: 180 80% 75%;
+    --sidebar-border: 220 15% 15%;
+    --sidebar-ring: 186 100% 60%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Dark mode - enhanced research interface */
+    --background: 218 19% 4%;
+    --foreground: 180 100% 92%;
+    --card: 220 15% 6%;
+    --border: 220 15% 18%;
+    --ring: 186 100% 65%;
   }
 }
 
@@ -100,6 +94,46 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-mono;
+    background: var(--gradient-field);
+  }
+
+  /* Scientific precision typography */
+  .font-scientific {
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .font-tensor {
+    font-family: 'Computer Modern', 'Latin Modern Math', serif;
+    font-variant: small-caps;
+  }
+
+  /* Precision controls */
+  .precision-slider {
+    background: var(--gradient-field);
+    border: 1px solid hsl(var(--border));
+    box-shadow: var(--shadow-field);
+  }
+
+  .field-visualization {
+    background: radial-gradient(circle at center, hsl(var(--primary) / 0.1), transparent 60%);
+    backdrop-filter: blur(2px);
+  }
+
+  /* Glowing effects for scientific elements */
+  .tensor-glow {
+    box-shadow: 0 0 10px hsl(var(--accent-glow) / 0.4);
+    border: 1px solid hsl(var(--accent) / 0.3);
+  }
+
+  .vector-glow {
+    box-shadow: 0 0 15px hsl(var(--primary-glow) / 0.3);
+    border: 1px solid hsl(var(--primary) / 0.4);
+  }
+
+  .resonance-glow {
+    box-shadow: 0 0 20px hsl(var(--warning) / 0.3);
+    border: 1px solid hsl(var(--warning) / 0.4);
   }
 }
