@@ -95,7 +95,7 @@ export const Vers3Vector = () => {
       tensorOverlays,
       drrSettings,
       metadata: {
-        version: '3.7.2',
+        version: '4.2.1',
         framework: 'Riemann-Cartan',
         classification: 'DARPA-CLASSIFIED'
       }
@@ -130,22 +130,9 @@ export const Vers3Vector = () => {
     );
   }, [encryptedMode]);
 
-  const handleTemporalParameterChange = useCallback((param: string, value: number) => {
-    setTemporalSettings(prev => ({
-      ...prev,
-      [param]: value
-    }));
-    
-    toast.info(`Temporal parameter updated: ${param} = ${value.toFixed(3)}`, {
-      duration: 2000,
-      className: 'font-scientific text-xs'
-    });
-  }, []);
-
   const handleHardwareData = useCallback((data: any) => {
     setHardwareData(data);
     
-    // Inject hardware data into field parameters
     if (data.magnetometer) {
       const magneticInfluence = data.magnetometer.magnitude * 0.01;
       setFieldParameters(prev => ({
@@ -158,7 +145,6 @@ export const Vers3Vector = () => {
   const handleCausalDataUpdate = useCallback((data: any) => {
     setCausalData(data);
     
-    // Generate temporal events from causal data
     if (data.anomalyCount > 0) {
       const newEvent = {
         id: `event-${Date.now()}`,
@@ -171,78 +157,115 @@ export const Vers3Vector = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background font-scientific">
+    <div className="min-h-screen bg-gradient-to-br from-background via-card/20 to-background font-scientific relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-accent/10 rounded-full blur-2xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 w-32 h-32 bg-warning/10 rounded-full blur-xl animate-pulse delay-500"></div>
+      </div>
+
       <HeaderSection encryptedMode={encryptedMode} />
 
-      {/* Main Interface */}
-      <div className="container mx-auto p-4 h-[calc(100vh-80px)]">
-        <div className="grid grid-cols-12 gap-4 h-full">
-          {/* Parameter Control Panel */}
-          <div className="col-span-3 space-y-4">
-            <ParameterPanel
-              fieldParameters={fieldParameters}
-              tensorOverlays={tensorOverlays}
-              drrSettings={drrSettings}
-              encryptedMode={encryptedMode}
-              onParameterChange={handleParameterChange}
-              onToggleChange={handleToggleChange}
-              onExport={handleExport}
-              onToggleEncryption={handleToggleEncryption}
-            />
+      {/* Main Interface with Glass Morphism */}
+      <div className="container mx-auto p-4 h-[calc(100vh-80px)] relative z-10">
+        <div className="grid grid-cols-12 gap-6 h-full">
+          {/* Left Panel - Enhanced with Glass Effect */}
+          <div className="col-span-3 space-y-6">
+            <div className="backdrop-blur-md bg-card/30 border border-border/20 rounded-2xl p-1 shadow-2xl">
+              <ParameterPanel
+                fieldParameters={fieldParameters}
+                tensorOverlays={tensorOverlays}
+                drrSettings={drrSettings}
+                encryptedMode={encryptedMode}
+                onParameterChange={handleParameterChange}
+                onToggleChange={handleToggleChange}
+                onExport={handleExport}
+                onToggleEncryption={handleToggleEncryption}
+              />
+            </div>
             
-            <HardwareInterface
-              onSensorData={handleHardwareData}
-              isActive={true}
-            />
+            <div className="backdrop-blur-md bg-card/30 border border-border/20 rounded-2xl p-6 shadow-2xl">
+              <HardwareInterface
+                onSensorData={handleHardwareData}
+                isActive={true}
+              />
+            </div>
           </div>
 
-          {/* Main Simulation Engine */}
-          <div className="col-span-6">
-            <SimulationEngine
-              fieldParameters={fieldParameters}
-              tensorOverlays={tensorOverlays}
-              drrSettings={drrSettings}
-              renderExtensions={(
-                <>
-                  <TemporalLattice
-                    fieldParameters={fieldParameters}
-                    causalParameters={temporalSettings}
-                    anomalyZones={anomalyZones}
-                  />
-                  <CausalEngine
-                    fieldParameters={fieldParameters}
-                    causalSettings={causalSettings}
-                    onCausalDataUpdate={handleCausalDataUpdate}
-                  />
-                </>
-              )}
-            />
+          {/* Central Simulation Engine - Immersive Design */}
+          <div className="col-span-6 relative">
+            <div className="backdrop-blur-xl bg-card/20 border border-primary/30 rounded-3xl shadow-[0_0_50px_rgba(0,204,255,0.2)] overflow-hidden h-full">
+              {/* Holographic Frame Effect */}
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/5 via-transparent to-accent/5 pointer-events-none"></div>
+              <div className="absolute inset-[1px] rounded-3xl border border-primary/20 pointer-events-none"></div>
+              
+              <SimulationEngine
+                fieldParameters={fieldParameters}
+                tensorOverlays={tensorOverlays}
+                drrSettings={drrSettings}
+                renderExtensions={(
+                  <>
+                    <TemporalLattice
+                      fieldParameters={fieldParameters}
+                      causalParameters={temporalSettings}
+                      anomalyZones={anomalyZones}
+                    />
+                    <CausalEngine
+                      fieldParameters={fieldParameters}
+                      causalSettings={causalSettings}
+                      onCausalDataUpdate={handleCausalDataUpdate}
+                    />
+                  </>
+                )}
+              />
+              
+              {/* Corner Accent Elements */}
+              <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-primary/60 rounded-tl-lg"></div>
+              <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-primary/60 rounded-tr-lg"></div>
+              <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-primary/60 rounded-bl-lg"></div>
+              <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-primary/60 rounded-br-lg"></div>
+            </div>
           </div>
 
-          {/* Right Panel - Extended Analytics */}
-          <div className="col-span-3 space-y-4">
-            <DataLogger
-              fieldParameters={fieldParameters}
-              isActive={true}
-            />
+          {/* Right Panel - Analytics Dashboard */}
+          <div className="col-span-3 space-y-6">
+            <div className="backdrop-blur-md bg-card/30 border border-border/20 rounded-2xl p-6 shadow-2xl">
+              <DataLogger
+                fieldParameters={fieldParameters}
+                isActive={true}
+              />
+            </div>
 
-            <OntologicalCore
-              fieldData={fieldParameters}
-              temporalEvents={temporalEvents}
-              isActive={true}
-            />
+            <div className="backdrop-blur-md bg-card/30 border border-border/20 rounded-2xl p-6 shadow-2xl">
+              <OntologicalCore
+                fieldData={fieldParameters}
+                temporalEvents={temporalEvents}
+                isActive={true}
+              />
+            </div>
 
-            <MetricsPanel
-              temporalSettings={temporalSettings}
-              causalData={causalData}
-              anomalyZones={anomalyZones}
-              hardwareData={hardwareData}
-            />
+            <div className="space-y-4">
+              <MetricsPanel
+                temporalSettings={temporalSettings}
+                causalData={causalData}
+                anomalyZones={anomalyZones}
+                hardwareData={hardwareData}
+              />
+            </div>
           </div>
         </div>
       </div>
 
       <FooterSection />
+      
+      {/* Floating Status Indicator */}
+      <div className="fixed bottom-6 right-6 backdrop-blur-md bg-success/20 border border-success/30 rounded-full px-4 py-2 shadow-lg">
+        <div className="flex items-center gap-2 text-xs font-scientific">
+          <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+          <span className="text-success">QUANTUM COHERENT</span>
+        </div>
+      </div>
     </div>
   );
 };
