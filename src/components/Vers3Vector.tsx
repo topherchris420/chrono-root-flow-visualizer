@@ -1,18 +1,11 @@
+
 import { useState, useCallback } from 'react';
-import { SimulationEngine } from './SimulationEngine';
-import { ParameterPanel } from './ParameterPanel';
-import { DataLogger } from './DataLogger';
+import { toast } from 'sonner';
 import { HeaderSection } from './HeaderSection';
 import { FooterSection } from './FooterSection';
-import { MetricsPanel } from './MetricsPanel';
-import { toast } from 'sonner';
-import { TemporalLattice } from './TemporalLattice';
-import { OntologicalCore } from './OntologicalCore';
-import { CausalEngine } from './CausalEngine';
-import { HardwareInterface } from './HardwareInterface';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import { Menu, Settings, BarChart3 } from 'lucide-react';
+import { MobileNavigation } from './MobileNavigation';
+import { DesktopLayout } from './DesktopLayout';
+import { MobileLayout } from './MobileLayout';
 
 export const Vers3Vector = () => {
   const [fieldParameters, setFieldParameters] = useState({
@@ -169,197 +162,55 @@ export const Vers3Vector = () => {
 
       <HeaderSection encryptedMode={encryptedMode} />
 
-      {/* Mobile Navigation - Shows only on mobile */}
-      <div className="lg:hidden fixed top-20 left-4 right-4 z-50 flex gap-2">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button size="sm" variant="outline" className="backdrop-blur-md bg-card/80 border-primary/20">
-              <Settings className="w-4 h-4 mr-2" />
-              Controls
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-80 bg-card/95 backdrop-blur-xl border-primary/20">
-            <div className="space-y-6 mt-6">
-              <ParameterPanel
-                fieldParameters={fieldParameters}
-                tensorOverlays={tensorOverlays}
-                drrSettings={drrSettings}
-                encryptedMode={encryptedMode}
-                onParameterChange={handleParameterChange}
-                onToggleChange={handleToggleChange}
-                onExport={handleExport}
-                onToggleEncryption={handleToggleEncryption}
-              />
-              <HardwareInterface
-                onSensorData={handleHardwareData}
-                isActive={true}
-              />
-            </div>
-          </SheetContent>
-        </Sheet>
-
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button size="sm" variant="outline" className="backdrop-blur-md bg-card/80 border-primary/20">
-              <BarChart3 className="w-4 h-4 mr-2" />
-              Analytics
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="right" className="w-80 bg-card/95 backdrop-blur-xl border-primary/20">
-            <div className="space-y-6 mt-6">
-              <DataLogger
-                fieldParameters={fieldParameters}
-                isActive={true}
-              />
-              <OntologicalCore
-                fieldData={fieldParameters}
-                temporalEvents={temporalEvents}
-                isActive={true}
-              />
-              <MetricsPanel
-                temporalSettings={temporalSettings}
-                causalData={causalData}
-                anomalyZones={anomalyZones}
-                hardwareData={hardwareData}
-              />
-            </div>
-          </SheetContent>
-        </Sheet>
-      </div>
+      <MobileNavigation
+        fieldParameters={fieldParameters}
+        tensorOverlays={tensorOverlays}
+        drrSettings={drrSettings}
+        encryptedMode={encryptedMode}
+        temporalSettings={temporalSettings}
+        causalData={causalData}
+        anomalyZones={anomalyZones}
+        hardwareData={hardwareData}
+        temporalEvents={temporalEvents}
+        onParameterChange={handleParameterChange}
+        onToggleChange={handleToggleChange}
+        onExport={handleExport}
+        onToggleEncryption={handleToggleEncryption}
+        onHardwareData={handleHardwareData}
+      />
 
       {/* Main Interface - Responsive Layout */}
       <div className="container mx-auto p-2 sm:p-4 min-h-[calc(100vh-80px)] relative z-10">
-        {/* Desktop Layout */}
-        <div className="hidden lg:grid lg:grid-cols-12 gap-6 h-[calc(100vh-120px)]">
-          {/* Left Panel */}
-          <div className="col-span-3 space-y-6">
-            <div className="backdrop-blur-md bg-card/30 border border-border/20 rounded-2xl p-1 shadow-2xl">
-              <ParameterPanel
-                fieldParameters={fieldParameters}
-                tensorOverlays={tensorOverlays}
-                drrSettings={drrSettings}
-                encryptedMode={encryptedMode}
-                onParameterChange={handleParameterChange}
-                onToggleChange={handleToggleChange}
-                onExport={handleExport}
-                onToggleEncryption={handleToggleEncryption}
-              />
-            </div>
-            
-            <div className="backdrop-blur-md bg-card/30 border border-border/20 rounded-2xl p-6 shadow-2xl">
-              <HardwareInterface
-                onSensorData={handleHardwareData}
-                isActive={true}
-              />
-            </div>
-          </div>
+        <DesktopLayout
+          fieldParameters={fieldParameters}
+          tensorOverlays={tensorOverlays}
+          drrSettings={drrSettings}
+          encryptedMode={encryptedMode}
+          temporalSettings={temporalSettings}
+          causalSettings={causalSettings}
+          causalData={causalData}
+          anomalyZones={anomalyZones}
+          hardwareData={hardwareData}
+          temporalEvents={temporalEvents}
+          onParameterChange={handleParameterChange}
+          onToggleChange={handleToggleChange}
+          onExport={handleExport}
+          onToggleEncryption={handleToggleEncryption}
+          onHardwareData={handleHardwareData}
+          onCausalDataUpdate={handleCausalDataUpdate}
+        />
 
-          {/* Central Simulation Engine */}
-          <div className="col-span-6 relative">
-            <div className="backdrop-blur-xl bg-card/20 border border-primary/30 rounded-3xl shadow-[0_0_50px_rgba(0,204,255,0.2)] overflow-hidden h-full">
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/5 via-transparent to-accent/5 pointer-events-none"></div>
-              <div className="absolute inset-[1px] rounded-3xl border border-primary/20 pointer-events-none"></div>
-              
-              <SimulationEngine
-                fieldParameters={fieldParameters}
-                tensorOverlays={tensorOverlays}
-                drrSettings={drrSettings}
-                renderExtensions={(
-                  <>
-                    <TemporalLattice
-                      fieldParameters={fieldParameters}
-                      causalParameters={temporalSettings}
-                      anomalyZones={anomalyZones}
-                    />
-                    <CausalEngine
-                      fieldParameters={fieldParameters}
-                      causalSettings={causalSettings}
-                      onCausalDataUpdate={handleCausalDataUpdate}
-                    />
-                  </>
-                )}
-              />
-              
-              {/* Corner Accent Elements */}
-              <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-primary/60 rounded-tl-lg"></div>
-              <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-primary/60 rounded-tr-lg"></div>
-              <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-primary/60 rounded-bl-lg"></div>
-              <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-primary/60 rounded-br-lg"></div>
-            </div>
-          </div>
-
-          {/* Right Panel */}
-          <div className="col-span-3 space-y-6">
-            <div className="backdrop-blur-md bg-card/30 border border-border/20 rounded-2xl p-6 shadow-2xl">
-              <DataLogger
-                fieldParameters={fieldParameters}
-                isActive={true}
-              />
-            </div>
-
-            <div className="backdrop-blur-md bg-card/30 border border-border/20 rounded-2xl p-6 shadow-2xl">
-              <OntologicalCore
-                fieldData={fieldParameters}
-                temporalEvents={temporalEvents}
-                isActive={true}
-              />
-            </div>
-
-            <div className="space-y-4">
-              <MetricsPanel
-                temporalSettings={temporalSettings}
-                causalData={causalData}
-                anomalyZones={anomalyZones}
-                hardwareData={hardwareData}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Layout */}
-        <div className="lg:hidden space-y-4 pt-16">
-          {/* Mobile Simulation Engine */}
-          <div className="backdrop-blur-xl bg-card/20 border border-primary/30 rounded-2xl shadow-[0_0_30px_rgba(0,204,255,0.2)] overflow-hidden h-[60vh] relative">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/5 via-transparent to-accent/5 pointer-events-none"></div>
-            <div className="absolute inset-[1px] rounded-2xl border border-primary/20 pointer-events-none"></div>
-            
-            <SimulationEngine
-              fieldParameters={fieldParameters}
-              tensorOverlays={tensorOverlays}
-              drrSettings={drrSettings}
-              renderExtensions={(
-                <>
-                  <TemporalLattice
-                    fieldParameters={fieldParameters}
-                    causalParameters={temporalSettings}
-                    anomalyZones={anomalyZones}
-                  />
-                  <CausalEngine
-                    fieldParameters={fieldParameters}
-                    causalSettings={causalSettings}
-                    onCausalDataUpdate={handleCausalDataUpdate}
-                  />
-                </>
-              )}
-            />
-            
-            {/* Mobile Corner Accents */}
-            <div className="absolute top-2 left-2 w-6 h-6 border-l-2 border-t-2 border-primary/60 rounded-tl-lg"></div>
-            <div className="absolute top-2 right-2 w-6 h-6 border-r-2 border-t-2 border-primary/60 rounded-tr-lg"></div>
-            <div className="absolute bottom-2 left-2 w-6 h-6 border-l-2 border-b-2 border-primary/60 rounded-bl-lg"></div>
-            <div className="absolute bottom-2 right-2 w-6 h-6 border-r-2 border-b-2 border-primary/60 rounded-br-lg"></div>
-          </div>
-
-          {/* Mobile Quick Metrics */}
-          <div className="backdrop-blur-md bg-card/30 border border-border/20 rounded-2xl p-4 shadow-2xl">
-            <MetricsPanel
-              temporalSettings={temporalSettings}
-              causalData={causalData}
-              anomalyZones={anomalyZones}
-              hardwareData={hardwareData}
-            />
-          </div>
-        </div>
+        <MobileLayout
+          fieldParameters={fieldParameters}
+          tensorOverlays={tensorOverlays}
+          drrSettings={drrSettings}
+          temporalSettings={temporalSettings}
+          causalSettings={causalSettings}
+          causalData={causalData}
+          anomalyZones={anomalyZones}
+          hardwareData={hardwareData}
+          onCausalDataUpdate={handleCausalDataUpdate}
+        />
       </div>
 
       <FooterSection />
