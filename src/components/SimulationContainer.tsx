@@ -20,9 +20,6 @@ interface SimulationContainerProps {
     adaptiveAnchors: boolean;
     phaseTracking: boolean;
   };
-  ewSigint: {
-    visible: boolean;
-  };
   quantumSensor: {
     visible: boolean;
   };
@@ -50,7 +47,6 @@ export const SimulationContainer = ({
   fieldParameters,
   tensorOverlays,
   drrSettings,
-  ewSigint,
   quantumSensor,
   hypersonicThreat,
   digitalTwinMode,

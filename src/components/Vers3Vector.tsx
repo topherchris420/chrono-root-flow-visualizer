@@ -28,10 +28,6 @@ export const Vers3Vector = () => {
     phaseTracking: false
   });
 
-  const [ewSigint, setEwSigint] = useState({
-    visible: false,
-  });
-
   const [quantumSensor, setQuantumSensor] = useState({
     visible: false,
   });
@@ -89,11 +85,6 @@ export const Vers3Vector = () => {
       }));
     } else if (category === 'drr') {
       setDrrSettings(prev => ({
-        ...prev,
-        [setting]: checked
-      }));
-    } else if (category === 'ew') {
-      setEwSigint(prev => ({
         ...prev,
         [setting]: checked
       }));
@@ -220,7 +211,6 @@ export const Vers3Vector = () => {
           fieldParameters={fieldParameters}
           tensorOverlays={tensorOverlays}
           drrSettings={drrSettings}
-          ewSigint={ewSigint}
           quantumSensor={quantumSensor}
           hypersonicThreat={hypersonicThreat}
           encryptedMode={encryptedMode}

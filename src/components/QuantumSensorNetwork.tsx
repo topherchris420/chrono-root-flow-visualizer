@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFrame } from '@react-three/fiber';
-import { BufferGeometry, Float32BufferAttribute, Points, ShaderMaterial } from 'three';
+import { BufferGeometry, Float32BufferAttribute, Points, ShaderMaterial, Color } from 'three';
 
 const vertexShader = `
   uniform float time;
@@ -49,7 +49,7 @@ export const QuantumSensorNetwork = ({ count, color }: QuantumSensorNetworkProps
       uniforms: {
         time: { value: 0 },
         size: { value: 15 },
-        color: { value: new (await import('three')).Color(color) },
+        color: { value: new Color(color) },
       },
       vertexShader,
       fragmentShader,

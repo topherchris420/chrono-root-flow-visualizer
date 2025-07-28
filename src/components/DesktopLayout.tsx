@@ -23,9 +23,6 @@ interface DesktopLayoutProps {
     adaptiveAnchors: boolean;
     phaseTracking: boolean;
   };
-  ewSigint: {
-    visible: boolean;
-  };
   quantumSensor: {
     visible: boolean;
   };
@@ -61,7 +58,6 @@ export const DesktopLayout = ({
   fieldParameters,
   tensorOverlays,
   drrSettings,
-  ewSigint,
   quantumSensor,
   hypersonicThreat,
   link16Data,

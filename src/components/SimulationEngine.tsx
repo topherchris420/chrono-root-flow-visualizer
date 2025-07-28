@@ -5,7 +5,6 @@ import { Vector3, Group } from 'three';
 import { VectorField } from './VectorField';
 import { TensorOverlay } from './TensorOverlay';
 import { ResonanceField } from './ResonanceField';
-import { ElectromagneticField } from './ElectromagneticField';
 import { QuantumSensorNetwork } from './QuantumSensorNetwork';
 import { Link16Display } from './Link16Display';
 import { Card } from '@/components/ui/card';
@@ -28,9 +27,6 @@ interface SimulationEngineProps {
     adaptiveAnchors: boolean;
     phaseTracking: boolean;
   };
-  ewSigint: {
-    visible: boolean;
-  };
   quantumSensor: {
     visible: boolean;
   };
@@ -43,7 +39,6 @@ export const SimulationEngine = ({
   fieldParameters, 
   tensorOverlays, 
   drrSettings,
-  ewSigint,
   quantumSensor,
   digitalTwinMode,
   link16Data,
@@ -153,11 +148,6 @@ export const SimulationEngine = ({
 
               {/* Extended render components */}
               {renderExtensions}
-
-              {/* Electromagnetic Field */}
-              {ewSigint.visible && (
-                <ElectromagneticField count={1000} color="#ff00ff" />
-              )}
 
               {/* Quantum Sensor Network */}
               {quantumSensor.visible && (

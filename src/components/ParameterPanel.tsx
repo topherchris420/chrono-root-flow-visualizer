@@ -81,11 +81,10 @@ export const ParameterPanel = ({
 
       <CardContent className="space-y-4">
         <Tabs defaultValue="physics" className="w-full">
-          <TabsList className="grid w-full grid-cols-6 bg-muted/50">
+          <TabsList className="grid w-full grid-cols-5 bg-muted/50">
             <TabsTrigger value="physics" className="text-xs">Physics</TabsTrigger>
             <TabsTrigger value="tensor" className="text-xs">Tensor</TabsTrigger>
             <TabsTrigger value="drr" className="text-xs">DRR</TabsTrigger>
-            <TabsTrigger value="ew" className="text-xs">EW</TabsTrigger>
             <TabsTrigger value="qs" className="text-xs">QS</TabsTrigger>
             <TabsTrigger value="ht" className="text-xs">HT</TabsTrigger>
           </TabsList>
@@ -257,28 +256,6 @@ export const ParameterPanel = ({
                   <Switch
                     checked={true}
                     onCheckedChange={(checked) => onToggleChange('qs.visible', checked)}
-                    className="vector-glow"
-                  />
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="ew" className="space-y-4 mt-4">
-            {/* EW/SIGINT */}
-            <div className="space-y-3">
-              <Label className="text-xs font-scientific text-foreground/80">
-                EW/SIGINT
-              </Label>
-
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <Label className="text-xs font-mono text-primary">
-                    EM Field
-                  </Label>
-                  <Switch
-                    checked={true}
-                    onCheckedChange={(checked) => onToggleChange('ew.visible', checked)}
                     className="vector-glow"
                   />
                 </div>
