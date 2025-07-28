@@ -5,12 +5,12 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Activity, 
-  Zap, 
-  RotateCcw, 
-  Clock, 
-  Cpu, 
+import {
+  Activity,
+  Zap,
+  RotateCcw,
+  Clock,
+  Cpu,
   Download,
   Lock,
   Unlock
@@ -56,7 +56,7 @@ export const ParameterPanel = ({
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-scientific text-primary flex items-center gap-2">
             <Cpu className="h-4 w-4" />
-            VERS3VECTOR CONTROL
+            Q-CAPE CONTROL
           </CardTitle>
           <Button
             variant="ghost"

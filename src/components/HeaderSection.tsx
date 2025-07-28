@@ -15,7 +15,7 @@ export const HeaderSection = ({ encryptedMode }: HeaderSectionProps) => {
                 alt="Vers3Vector Logo"
                 className="w-8 h-8 rounded-full"
               />
-              <h1 className="text-xl font-bold text-primary">VERS3VECTOR</h1>
+              <h1 className="text-xl font-bold text-primary">Q-CAPE</h1>
             </div>
             <div className="text-xs text-muted-foreground font-mono">
               Temporal Lattice | Causal Engine | Ontological Core | v4.2.1

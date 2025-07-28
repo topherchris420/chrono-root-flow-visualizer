@@ -37,7 +37,7 @@ export const DataLogger = ({ fieldParameters, isActive }: DataLoggerProps) => {
     const interval = setInterval(() => {
       const logTypes = ['info', 'tensor', 'resonance'] as const;
       const randomType = logTypes[Math.floor(Math.random() * logTypes.length)];
-      
+
       const messages = {
         info: [
           'Vector field calculations updated',
@@ -200,7 +200,7 @@ export const DataLogger = ({ fieldParameters, isActive }: DataLoggerProps) => {
                       </p>
                       {log.data && (
                         <div className="mt-1 text-xs font-mono text-muted-foreground/70">
-                          E: {log.data.energyDensity?.toFixed(3)} | 
+                          E: {log.data.energyDensity?.toFixed(3)} |
                           T: {log.data.timeSync?.toFixed(3)}
                         </div>
                       )}

@@ -35,10 +35,10 @@ interface CausalEngineProps {
   onCausalDataUpdate: (data: any) => void;
 }
 
-export const CausalEngine = ({ 
-  fieldParameters, 
-  causalSettings, 
-  onCausalDataUpdate 
+export const CausalEngine = ({
+  fieldParameters,
+  causalSettings,
+  onCausalDataUpdate
 }: CausalEngineProps) => {
   const groupRef = useRef<Group>(null);
   const [causalLoops, setCausalLoops] = useState<CausalLoop[]>([]);
@@ -48,7 +48,7 @@ export const CausalEngine = ({
   // Initialize causal loops
   useEffect(() => {
     const initialLoops: CausalLoop[] = [];
-    
+
     for (let i = 0; i < 3; i++) {
       const loop: CausalLoop = {
         id: `loop-${i}`,
@@ -60,7 +60,7 @@ export const CausalEngine = ({
       };
       initialLoops.push(loop);
     }
-    
+
     setCausalLoops(initialLoops);
   }, [causalSettings.retrocausalStrength]);
 
@@ -69,14 +69,14 @@ export const CausalEngine = ({
     const points: Vector3[] = [];
     const radius = 3 + index * 2;
     const height = index * 1.5;
-    
+
     for (let t = 0; t <= Math.PI * 2; t += Math.PI / 8) {
       const x = Math.cos(t) * radius + Math.sin(t * 3) * 0.5;
       const y = Math.sin(t) * radius + Math.cos(t * 2) * 0.5;
       const z = height + Math.sin(t * 4) * 0.3;
       points.push(new Vector3(x, y, z));
     }
-    
+
     // Close the loop
     points.push(points[0].clone());
     return points;
@@ -86,7 +86,7 @@ export const CausalEngine = ({
   const computeFeedbackMatrix = useMemo(() => {
     const size = causalLoops.length;
     const matrix: number[][] = Array(size).fill(0).map(() => Array(size).fill(0));
-    
+
     causalLoops.forEach((loop1, i) => {
       causalLoops.forEach((loop2, j) => {
         if (i !== j) {
@@ -94,33 +94,33 @@ export const CausalEngine = ({
             const minDist = Math.min(...loop2.path.map(point2 => point1.distanceTo(point2)));
             return sum + minDist;
           }, 0) / loop1.path.length;
-          
-          const feedback = Math.exp(-avgDistance * 0.1) * 
-                          loop1.retrocausalFactor * 
+
+          const feedback = Math.exp(-avgDistance * 0.1) *
+                          loop1.retrocausalFactor *
                           loop2.retrocausalFactor *
                           causalSettings.retrocausalStrength;
-          
+
           matrix[i][j] = feedback;
         }
       });
     });
-    
+
     return matrix;
   }, [causalLoops, causalSettings.retrocausalStrength]);
 
   // Real-time causal anomaly generation
   useFrame((state) => {
     const time = state.clock.elapsedTime;
-    
+
     if (groupRef.current) {
       groupRef.current.rotation.y += 0.0005;
-      
+
       // Update causal loops with retrocausal feedback
-      setCausalLoops(prevLoops => 
+      setCausalLoops(prevLoops =>
         prevLoops.map((loop, index) => {
           const feedbackInfluence = computeFeedbackMatrix[index]?.reduce((sum, val) => sum + val, 0) || 0;
           const temporalDrift = Math.sin(time * 0.1 + loop.temporalPhase) * 0.1;
-          
+
           return {
             ...loop,
             strength: Math.max(0.1, Math.min(1.0, loop.strength + feedbackInfluence * 0.01)),
@@ -142,12 +142,12 @@ export const CausalEngine = ({
           radius: 0.5 + Math.random() * 2,
           creationTime: time
         };
-        
+
         setTorsionAnomalies(prev => [...prev, newAnomaly].slice(-10));
       }
 
       // Update torsion anomalies
-      setTorsionAnomalies(prevAnomalies => 
+      setTorsionAnomalies(prevAnomalies =>
         prevAnomalies.map(anomaly => ({
           ...anomaly,
           intensity: anomaly.intensity * 0.995, // Gradual decay
@@ -181,14 +181,14 @@ export const CausalEngine = ({
             transparent
             opacity={0.7 + loop.strength * 0.3}
           />
-          
+
           {/* Echo loops for retrocausal visualization */}
           {Array.from({ length: loop.echoDepth }, (_, echoIndex) => {
             const echoStrength = loop.strength * Math.pow(0.7, echoIndex + 1);
-            const echoPath = loop.path.map(point => 
+            const echoPath = loop.path.map(point =>
               point.clone().multiplyScalar(1 + (echoIndex + 1) * 0.1)
             );
-            
+
             return (
               <Line
                 key={`echo-${echoIndex}`}
@@ -200,11 +200,11 @@ export const CausalEngine = ({
               />
             );
           })}
-          
+
           {/* Loop nodes for phase tracking */}
           {loop.path.slice(0, -1).map((point, pointIndex) => {
             const phaseIntensity = Math.sin(pointIndex * 0.5 + loop.temporalPhase) * 0.5 + 0.5;
-            
+
             return (
               <Sphere
                 key={`node-${pointIndex}`}
@@ -236,7 +236,7 @@ export const CausalEngine = ({
               opacity={anomaly.intensity}
             />
           </Sphere>
-          
+
           {/* Distortion field */}
           <Sphere
             position={[anomaly.position.x, anomaly.position.y, anomaly.position.z]}
@@ -253,16 +253,16 @@ export const CausalEngine = ({
       ))}
 
       {/* Feedback visualization between loops */}
-      {causalLoops.map((loop1, i) => 
+      {causalLoops.map((loop1, i) =>
         causalLoops.map((loop2, j) => {
           if (i >= j) return null;
-          
+
           const feedbackStrength = computeFeedbackMatrix[i]?.[j] || 0;
           if (feedbackStrength < 0.1) return null;
-          
+
           const midpoint1 = loop1.path[Math.floor(loop1.path.length / 2)];
           const midpoint2 = loop2.path[Math.floor(loop2.path.length / 2)];
-          
+
           return (
             <Line
               key={`feedback-${i}-${j}`}
