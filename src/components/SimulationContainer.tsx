@@ -20,14 +20,6 @@ interface SimulationContainerProps {
     adaptiveAnchors: boolean;
     phaseTracking: boolean;
   };
-  quantumSensor: {
-    visible: boolean;
-  };
-  hypersonicThreat: {
-    visible: boolean;
-  };
-  digitalTwinMode: boolean;
-  link16Data: any[];
   temporalSettings: {
     branchingProbability: number;
     decoherenceRate: number;
@@ -47,10 +39,6 @@ export const SimulationContainer = ({
   fieldParameters,
   tensorOverlays,
   drrSettings,
-  quantumSensor,
-  hypersonicThreat,
-  digitalTwinMode,
-  link16Data,
   temporalSettings,
   causalSettings,
   anomalyZones,
@@ -73,10 +61,6 @@ export const SimulationContainer = ({
         fieldParameters={fieldParameters}
         tensorOverlays={tensorOverlays}
         drrSettings={drrSettings}
-        ewSigint={ewSigint}
-        quantumSensor={quantumSensor}
-        digitalTwinMode={digitalTwinMode}
-        link16Data={link16Data}
         renderExtensions={(
           <>
             <TemporalLattice
@@ -85,7 +69,9 @@ export const SimulationContainer = ({
               anomalyZones={anomalyZones}
             />
             <CausalEngine
-              hypersonicThreat={hypersonicThreat}
+              fieldParameters={fieldParameters}
+              causalSettings={causalSettings}
+              onCausalDataUpdate={onCausalDataUpdate}
             />
           </>
         )}
