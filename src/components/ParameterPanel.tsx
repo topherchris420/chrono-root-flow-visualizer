@@ -5,16 +5,14 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Activity, 
-  Zap, 
-  RotateCcw, 
-  Clock, 
-  Cpu, 
-  Download,
-  Lock,
-  Unlock
-} from 'lucide-react';
+import { ActivityIcon } from './icons/ActivityIcon';
+import { ZapIcon } from './icons/ZapIcon';
+import { RotateCcwIcon } from './icons/RotateCcwIcon';
+import { ClockIcon } from './icons/ClockIcon';
+import { CpuIcon } from './icons/CpuIcon';
+import { DownloadIcon } from './icons/DownloadIcon';
+import { LockIcon } from './icons/LockIcon';
+import { UnlockIcon } from './icons/UnlockIcon';
 
 interface ParameterPanelProps {
   fieldParameters: {
@@ -55,8 +53,8 @@ export const ParameterPanel = ({
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-scientific text-primary flex items-center gap-2">
-            <Cpu className="h-4 w-4" />
-            VERS3VECTOR CONTROL
+            <CpuIcon className="h-4 w-4" />
+            Q-CAPE CONTROL
           </CardTitle>
           <Button
             variant="ghost"
@@ -65,9 +63,9 @@ export const ParameterPanel = ({
             className="h-8 w-8 p-0"
           >
             {encryptedMode ? (
-              <Lock className="h-3 w-3 text-warning" />
+              <LockIcon className="h-3 w-3 text-warning" />
             ) : (
-              <Unlock className="h-3 w-3 text-muted-foreground" />
+              <UnlockIcon className="h-3 w-3 text-muted-foreground" />
             )}
           </Button>
         </div>
@@ -83,10 +81,13 @@ export const ParameterPanel = ({
 
       <CardContent className="space-y-4">
         <Tabs defaultValue="physics" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-muted/50">
+          <TabsList className="grid w-full grid-cols-6 bg-muted/50">
             <TabsTrigger value="physics" className="text-xs">Physics</TabsTrigger>
             <TabsTrigger value="tensor" className="text-xs">Tensor</TabsTrigger>
             <TabsTrigger value="drr" className="text-xs">DRR</TabsTrigger>
+            <TabsTrigger value="ew" className="text-xs">EW</TabsTrigger>
+            <TabsTrigger value="qs" className="text-xs">QS</TabsTrigger>
+            <TabsTrigger value="ht" className="text-xs">HT</TabsTrigger>
           </TabsList>
 
           <TabsContent value="physics" className="space-y-4 mt-4">
@@ -94,7 +95,7 @@ export const ParameterPanel = ({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label className="text-xs font-scientific text-foreground/80 flex items-center gap-1">
-                  <Activity className="h-3 w-3" />
+                  <ActivityIcon className="h-3 w-3" />
                   Energy Density
                 </Label>
                 <Badge variant="outline" className="text-xs font-mono">
@@ -115,7 +116,7 @@ export const ParameterPanel = ({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label className="text-xs font-scientific text-foreground/80 flex items-center gap-1">
-                  <RotateCcw className="h-3 w-3" />
+                  <RotateCcwIcon className="h-3 w-3" />
                   Spin Distribution
                 </Label>
                 <Badge variant="outline" className="text-xs font-mono">
@@ -136,7 +137,7 @@ export const ParameterPanel = ({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label className="text-xs font-scientific text-foreground/80 flex items-center gap-1">
-                  <Zap className="h-3 w-3" />
+                  <ZapIcon className="h-3 w-3" />
                   EM Field Torsion
                 </Label>
                 <Badge variant="outline" className="text-xs font-mono">
@@ -157,7 +158,7 @@ export const ParameterPanel = ({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label className="text-xs font-scientific text-foreground/80 flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
+                  <ClockIcon className="h-3 w-3" />
                   Time Sync
                 </Label>
                 <Badge variant="outline" className="text-xs font-mono">
@@ -219,6 +220,72 @@ export const ParameterPanel = ({
             </div>
           </TabsContent>
 
+          <TabsContent value="ht" className="space-y-4 mt-4">
+            {/* Hypersonic Threat */}
+            <div className="space-y-3">
+              <Label className="text-xs font-scientific text-foreground/80">
+                Hypersonic Threat
+              </Label>
+
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label className="text-xs font-mono text-destructive">
+                    Threat Visible
+                  </Label>
+                  <Switch
+                    checked={true}
+                    onCheckedChange={(checked) => onToggleChange('ht.visible', checked)}
+                    className="vector-glow"
+                  />
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="qs" className="space-y-4 mt-4">
+            {/* Quantum Sensor Network */}
+            <div className="space-y-3">
+              <Label className="text-xs font-scientific text-foreground/80">
+                Quantum Sensor Network
+              </Label>
+
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label className="text-xs font-mono text-primary">
+                    Sensor Network
+                  </Label>
+                  <Switch
+                    checked={true}
+                    onCheckedChange={(checked) => onToggleChange('qs.visible', checked)}
+                    className="vector-glow"
+                  />
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="ew" className="space-y-4 mt-4">
+            {/* EW/SIGINT */}
+            <div className="space-y-3">
+              <Label className="text-xs font-scientific text-foreground/80">
+                EW/SIGINT
+              </Label>
+
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label className="text-xs font-mono text-primary">
+                    EM Field
+                  </Label>
+                  <Switch
+                    checked={true}
+                    onCheckedChange={(checked) => onToggleChange('ew.visible', checked)}
+                    className="vector-glow"
+                  />
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
           <TabsContent value="drr" className="space-y-4 mt-4">
             {/* Dynamic Resonance Rooting */}
             <div className="space-y-3">
@@ -271,7 +338,7 @@ export const ParameterPanel = ({
             className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-scientific text-xs"
             size="sm"
           >
-            <Download className="h-3 w-3 mr-2" />
+            <DownloadIcon className="h-3 w-3 mr-2" />
             Export Simulation Data
           </Button>
         </div>

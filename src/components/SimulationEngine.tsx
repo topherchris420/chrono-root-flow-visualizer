@@ -5,6 +5,9 @@ import { Vector3, Group } from 'three';
 import { VectorField } from './VectorField';
 import { TensorOverlay } from './TensorOverlay';
 import { ResonanceField } from './ResonanceField';
+import { ElectromagneticField } from './ElectromagneticField';
+import { QuantumSensorNetwork } from './QuantumSensorNetwork';
+import { Link16Display } from './Link16Display';
 import { Card } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 
@@ -25,6 +28,14 @@ interface SimulationEngineProps {
     adaptiveAnchors: boolean;
     phaseTracking: boolean;
   };
+  ewSigint: {
+    visible: boolean;
+  };
+  quantumSensor: {
+    visible: boolean;
+  };
+  digitalTwinMode: boolean;
+  link16Data: any[];
   renderExtensions?: React.ReactNode;
 }
 
@@ -32,6 +43,10 @@ export const SimulationEngine = ({
   fieldParameters, 
   tensorOverlays, 
   drrSettings,
+  ewSigint,
+  quantumSensor,
+  digitalTwinMode,
+  link16Data,
   renderExtensions 
 }: SimulationEngineProps) => {
   const groupRef = useRef<Group>(null);
@@ -138,6 +153,19 @@ export const SimulationEngine = ({
 
               {/* Extended render components */}
               {renderExtensions}
+
+              {/* Electromagnetic Field */}
+              {ewSigint.visible && (
+                <ElectromagneticField count={1000} color="#ff00ff" />
+              )}
+
+              {/* Quantum Sensor Network */}
+              {quantumSensor.visible && (
+                <QuantumSensorNetwork count={100} color="#00ffff" />
+              )}
+
+              {/* Digital Twin */}
+              {digitalTwinMode && <Link16Display data={link16Data} />}
             </group>
 
             {/* Orbital controls for navigation */}

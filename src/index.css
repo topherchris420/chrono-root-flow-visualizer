@@ -8,83 +8,83 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* DARPA-grade research interface - dark scientific theme */
-    --background: 218 19% 6%;
-    --foreground: 180 100% 88%;
+    /* DoD-compliant mission-centric theme */
+    --background: 210 10% 15%; /* Dark blue-gray */
+    --foreground: 210 10% 85%; /* Light gray */
 
-    --card: 220 15% 8%;
-    --card-foreground: 180 100% 88%;
+    --card: 210 10% 20%;
+    --card-foreground: 210 10% 85%;
 
-    --popover: 220 15% 8%;
-    --popover-foreground: 180 100% 88%;
+    --popover: 210 10% 20%;
+    --popover-foreground: 210 10% 85%;
 
-    --primary: 186 100% 60%;
-    --primary-foreground: 218 19% 6%;
-    --primary-glow: 186 100% 75%;
+    --primary: 180 40% 60%; /* Muted cyan */
+    --primary-foreground: 210 10% 5%;
+    --primary-glow: 180 40% 75%;
 
-    --secondary: 220 15% 12%;
-    --secondary-foreground: 180 80% 75%;
+    --secondary: 210 10% 25%;
+    --secondary-foreground: 210 10% 75%;
 
-    --muted: 220 15% 10%;
-    --muted-foreground: 180 30% 50%;
+    --muted: 210 10% 22%;
+    --muted-foreground: 210 10% 55%;
 
-    --accent: 276 100% 65%;
-    --accent-foreground: 218 19% 6%;
-    --accent-glow: 276 100% 80%;
+    --accent: 30 80% 60%; /* Muted orange */
+    --accent-foreground: 210 10% 5%;
+    --accent-glow: 30 80% 75%;
 
-    --destructive: 0 100% 65%;
+    --destructive: 0 60% 50%; /* Muted red */
     --destructive-foreground: 0 0% 98%;
 
-    --warning: 45 100% 60%;
-    --warning-foreground: 218 19% 6%;
+    --warning: 45 70% 55%; /* Muted yellow */
+    --warning-foreground: 210 10% 5%;
 
-    --success: 142 100% 55%;
-    --success-foreground: 218 19% 6%;
+    --success: 120 40% 50%; /* Muted green */
+    --success-foreground: 210 10% 5%;
 
-    --border: 220 15% 15%;
-    --input: 220 15% 12%;
-    --ring: 186 100% 60%;
+    --border: 210 10% 30%;
+    --input: 210 10% 25%;
+    --ring: 180 40% 60%;
 
     --radius: 0.25rem;
 
     /* Scientific visualization colors */
-    --vector-field: 186 100% 60%;
-    --tensor-overlay: 276 100% 65%;
-    --resonance-root: 45 100% 60%;
-    --curvature-tensor: 0 100% 65%;
-    --torsion-field: 142 100% 55%;
+    --vector-field: 180 40% 60%;
+    --tensor-overlay: 30 80% 60%;
+    --resonance-root: 45 70% 55%;
+    --curvature-tensor: 0 60% 50%;
+    --torsion-field: 120 40% 50%;
 
     /* Gradients for spatial depth */
-    --gradient-primary: linear-gradient(135deg, hsl(186 100% 60%), hsl(276 100% 65%));
-    --gradient-field: linear-gradient(180deg, hsl(218 19% 8%), hsl(218 19% 4%));
-    --gradient-resonance: radial-gradient(circle, hsl(45 100% 60% / 0.3), transparent 70%);
+    --gradient-primary: linear-gradient(135deg, hsl(180 40% 60%), hsl(30 80% 60%));
+    --gradient-field: linear-gradient(180deg, hsl(210 10% 20%), hsl(210 10% 10%));
+    --gradient-resonance: radial-gradient(circle, hsl(45 70% 55% / 0.3), transparent 70%);
 
     /* Precision UI shadows */
-    --shadow-field: 0 0 20px hsl(186 100% 60% / 0.2);
-    --shadow-tensor: 0 0 15px hsl(276 100% 65% / 0.3);
-    --shadow-glow: 0 0 30px hsl(186 100% 60% / 0.1);
+    --shadow-field: 0 0 20px hsl(180 40% 60% / 0.2);
+    --shadow-tensor: 0 0 15px hsl(30 80% 60% / 0.3);
+    --shadow-glow: 0 0 30px hsl(180 40% 60% / 0.1);
 
     /* Animation timing */
     --transition-field: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-tensor: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-    --sidebar-background: 220 15% 8%;
-    --sidebar-foreground: 180 80% 75%;
-    --sidebar-primary: 186 100% 60%;
-    --sidebar-primary-foreground: 218 19% 6%;
-    --sidebar-accent: 220 15% 12%;
-    --sidebar-accent-foreground: 180 80% 75%;
-    --sidebar-border: 220 15% 15%;
-    --sidebar-ring: 186 100% 60%;
+    --sidebar-background: 210 10% 20%;
+    --sidebar-foreground: 210 10% 75%;
+    --sidebar-primary: 180 40% 60%;
+    --sidebar-primary-foreground: 210 10% 5%;
+    --sidebar-accent: 210 10% 25%;
+    --sidebar-accent-foreground: 210 10% 75%;
+    --sidebar-border: 210 10% 30%;
+    --sidebar-ring: 180 40% 60%;
   }
 
   .dark {
     /* Dark mode - enhanced research interface */
-    --background: 218 19% 4%;
-    --foreground: 180 100% 92%;
-    --card: 220 15% 6%;
-    --border: 220 15% 18%;
-    --ring: 186 100% 65%;
+    --background: 210 10% 10%;
+    --foreground: 210 10% 90%;
+    --card: 210 10% 15%;
+    --border: 210 10% 25%;
+    --ring: 180 40% 65%;
   }
 }
 
@@ -94,13 +94,13 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground font-mono;
+    @apply bg-background text-foreground font-military;
     background: var(--gradient-field);
   }
 
   /* Scientific precision typography */
   .font-scientific {
-    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+    font-family: 'Courier New', 'monospace';
     font-variant-numeric: tabular-nums;
   }
 

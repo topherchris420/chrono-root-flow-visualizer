@@ -23,6 +23,17 @@ interface DesktopLayoutProps {
     adaptiveAnchors: boolean;
     phaseTracking: boolean;
   };
+  ewSigint: {
+    visible: boolean;
+  };
+  quantumSensor: {
+    visible: boolean;
+  };
+  hypersonicThreat: {
+    visible: boolean;
+  };
+  link16Data: any[];
+  gccsData: any[];
   encryptedMode: boolean;
   temporalSettings: {
     branchingProbability: number;
@@ -50,6 +61,11 @@ export const DesktopLayout = ({
   fieldParameters,
   tensorOverlays,
   drrSettings,
+  ewSigint,
+  quantumSensor,
+  hypersonicThreat,
+  link16Data,
+  gccsData,
   encryptedMode,
   temporalSettings,
   causalSettings,
@@ -95,6 +111,9 @@ export const DesktopLayout = ({
           fieldParameters={fieldParameters}
           tensorOverlays={tensorOverlays}
           drrSettings={drrSettings}
+          ewSigint={ewSigint}
+          quantumSensor={quantumSensor}
+          hypersonicThreat={hypersonicThreat}
           temporalSettings={temporalSettings}
           causalSettings={causalSettings}
           anomalyZones={anomalyZones}
@@ -107,6 +126,8 @@ export const DesktopLayout = ({
         <div className="backdrop-blur-md bg-card/30 border border-border/20 rounded-2xl p-6 shadow-2xl">
           <DataLogger
             fieldParameters={fieldParameters}
+            link16Data={link16Data}
+            gccsData={gccsData}
             isActive={true}
           />
         </div>

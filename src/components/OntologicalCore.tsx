@@ -11,6 +11,7 @@ interface SemanticEvent {
   type: 'root_shift' | 'vector_bifurcation' | 'torsion_singularity' | 'phase_collapse';
   magnitude: number;
   interpretation: string;
+  coa: string;
   metaphysicalWeight: number;
   causalChain: string[];
 }
@@ -45,40 +46,73 @@ export const OntologicalCore = ({ fieldData, temporalEvents, isActive }: Ontolog
   });
 
   // Ontological interpretation engine
-  const generateInterpretation = useCallback((eventType: string, magnitude: number): string => {
-    const interpretations = {
+  const generateThreatAssessment = useCallback((eventType: string, magnitude: number): { interpretation: string, coa: string } => {
+    const threats = {
       root_shift: [
-        "Existential anchor displacement detected",
-        "Phenomenological substrate reconfiguration",
-        "Ontological foundation perturbation",
-        "Reality matrix eigenvalue shift"
+        "Hostile EW activity detected",
+        "Enemy SIGINT interception suspected",
+        "GPS spoofing attack in progress",
+        "Communications jamming detected"
       ],
       vector_bifurcation: [
-        "Causal pathway divergence initiated",
-        "Possibility space branching event",
-        "Deterministic structure fragmentation",
-        "Timeline coherence delocalization"
+        "Multiple incoming high-speed threats",
+        "Hypersonic missile launch detected",
+        "Unidentified aerial vehicle swarm",
+        "Ballistic missile trajectory detected"
       ],
       torsion_singularity: [
-        "Spacetime curvature discontinuity",
-        "Geometric topology collapse point",
-        "Riemann-Cartan metric anomaly",
-        "Chrono-spatial phase transition"
+        "High-energy laser weapon firing",
+        "Directed energy weapon attack",
+        "EMP detonation detected",
+        "Exotic weapon signature identified"
       ],
       phase_collapse: [
-        "Quantum superposition resolution",
-        "Wavefunction decoherence cascade",
-        "Probabilistic state crystallization",
-        "Observer-dependent reality collapse"
+        "Enemy stealth asset uncloaking",
+        "Quantum sensor network compromised",
+        "Enemy C2 node identified",
+        "High-value target acquisition"
       ]
     };
 
-    const baseInterpretations = interpretations[eventType as keyof typeof interpretations] || ["Unknown phenomenon"];
-    const selectedInterpretation = baseInterpretations[Math.floor(Math.random() * baseInterpretations.length)];
+    const coas = {
+      root_shift: [
+        "Deploy electronic countermeasures",
+        "Switch to frequency-hopping comms",
+        "Verify GPS integrity with INS",
+        "Triangulate jamming source"
+      ],
+      vector_bifurcation: [
+        "Engage with layered air defense",
+        "Launch interceptor missiles",
+        "Deploy decoy countermeasures",
+        "Alert civilian defense authorities"
+      ],
+      torsion_singularity: [
+        "Activate defensive shields",
+        "Maneuver to evade attack vector",
+        "Target energy source for counter-attack",
+        "Disperse assets to minimize damage"
+      ],
+      phase_collapse: [
+        "Engage target with kinetic weapons",
+        "Isolate compromised network segment",
+        "Deploy ISR assets to monitor target",
+        "Prepare for immediate action"
+      ]
+    };
+
+    const baseThreats = threats[eventType as keyof typeof threats] || ["Unknown threat"];
+    const selectedThreat = baseThreats[Math.floor(Math.random() * baseThreats.length)];
     
-    const magnitudeQualifier = magnitude > 0.8 ? "Critical" : magnitude > 0.5 ? "Significant" : "Minor";
+    const baseCoas = coas[eventType as keyof typeof coas] || ["No action recommended"];
+    const selectedCoa = baseCoas[Math.floor(Math.random() * baseCoas.length)];
+
+    const magnitudeQualifier = magnitude > 0.8 ? "CRITICAL" : magnitude > 0.5 ? "HIGH" : "MODERATE";
     
-    return `${magnitudeQualifier}: ${selectedInterpretation}`;
+    return {
+      interpretation: `${magnitudeQualifier} THREAT: ${selectedThreat}`,
+      coa: `RECOMMENDED COA: ${selectedCoa}`
+    };
   }, []);
 
   // Calculate metaphysical weight based on field parameters
@@ -108,13 +142,15 @@ export const OntologicalCore = ({ fieldData, temporalEvents, isActive }: Ontolog
       const eventTypes = ['root_shift', 'vector_bifurcation', 'torsion_singularity', 'phase_collapse'];
       const eventType = eventTypes[Math.floor(Math.random() * eventTypes.length)];
       const magnitude = Math.random();
+      const { interpretation, coa } = generateThreatAssessment(eventType, magnitude);
       
       const event: SemanticEvent = {
         id: `sem-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         timestamp: Date.now(),
         type: eventType as SemanticEvent['type'],
         magnitude: magnitude,
-        interpretation: generateInterpretation(eventType, magnitude),
+        interpretation: interpretation,
+        coa: coa,
         metaphysicalWeight: calculateMetaphysicalWeight(eventType, magnitude),
         causalChain: [
           `Field Energy: ${fieldData.energyDensity.toFixed(3)}`,
@@ -129,7 +165,7 @@ export const OntologicalCore = ({ fieldData, temporalEvents, isActive }: Ontolog
     if (newEvents.length > 0) {
       setSemanticEvents(prev => [...prev, ...newEvents].slice(-50));
     }
-  }, [temporalEvents, fieldData, isActive, generateInterpretation, calculateMetaphysicalWeight]);
+  }, [temporalEvents, fieldData, isActive, generateThreatAssessment, calculateMetaphysicalWeight]);
 
   // Update semiotic map based on semantic events
   useEffect(() => {
@@ -247,12 +283,13 @@ export const OntologicalCore = ({ fieldData, temporalEvents, isActive }: Ontolog
                     </span>
                   </div>
                   <div className="text-foreground/80 mb-1">{event.interpretation}</div>
+                  <div className="text-warning mb-1">{event.coa}</div>
                   <div className="flex justify-between items-center">
                     <span className="text-muted-foreground text-[10px]">
-                      Weight: {event.metaphysicalWeight.toFixed(3)}
+                      Threat Level: {event.metaphysicalWeight.toFixed(3)}
                     </span>
                     <div className="flex items-center gap-1">
-                      {event.magnitude > 0.7 && <Target className="h-2 w-2 text-warning" />}
+                      {event.magnitude > 0.7 && <Target className="h-2 w-2 text-destructive" />}
                       {event.metaphysicalWeight > 0.8 && <GitBranch className="h-2 w-2 text-primary" />}
                     </div>
                   </div>

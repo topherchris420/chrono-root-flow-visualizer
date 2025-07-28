@@ -1,11 +1,11 @@
 
-# VERS3VECTOR
+# Q-CAPE
 
-![VERS3VECTOR](public/lovable-uploads/da1c990c-f138-42e2-bf8a-7774d65f3410.png)
+![Q-CAPE](public/lovable-uploads/da1c990c-f138-42e2-bf8a-7774d65f3410.png)
 
 ## 🌌 Overview
 
-VERS3VECTOR is a platform that enables real-time visualization and manipulation of multi-dimensional spacetime manifolds using the Riemann-Cartan framework. This advanced research tool integrates temporal lattice computation, quantum decoherence modeling, and Dynamic Resonance Rooting (DRR) to simulate non-linear time structures and causal anomalies.
+Q-CAPE is a platform that enables real-time visualization and manipulation of multi-dimensional spacetime manifolds using the Riemann-Cartan framework. This advanced research tool integrates temporal lattice computation, quantum decoherence modeling, and Dynamic Resonance Rooting (DRR) to simulate non-linear time structures and causal anomalies.
 
 ### 🔬 Core Capabilities
 
@@ -222,7 +222,7 @@ This project is licensed under the Advanced Research License (ARL) - see the [LI
 
 ---
 
-*VERS3VECTOR v4.2.1 - Temporal Lattice | Causal Engine | Ontological Core*
+*Q-CAPE v4.2.1 - Temporal Lattice | Causal Engine | Ontological Core*
 
 **⚠️ EXPERIMENTAL TECHNOLOGY - USE AT YOUR OWN RISK**
 

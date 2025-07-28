@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { HeaderSection } from './HeaderSection';
 import { FooterSection } from './FooterSection';
 import { MobileNavigation } from './MobileNavigation';
+import { useDataFeeds } from './DataFeeds';
 import { DesktopLayout } from './DesktopLayout';
 import { MobileLayout } from './MobileLayout';
 
@@ -27,6 +28,20 @@ export const Vers3Vector = () => {
     phaseTracking: false
   });
 
+  const [ewSigint, setEwSigint] = useState({
+    visible: false,
+  });
+
+  const [quantumSensor, setQuantumSensor] = useState({
+    visible: false,
+  });
+
+  const [hypersonicThreat, setHypersonicThreat] = useState({
+    visible: false,
+  });
+
+  const [digitalTwinMode, setDigitalTwinMode] = useState(false);
+
   const [encryptedMode, setEncryptedMode] = useState(false);
 
   const [temporalSettings, setTemporalSettings] = useState({
@@ -49,6 +64,8 @@ export const Vers3Vector = () => {
     { x: -3, y: 4, z: -1 },
     { x: 0, y: -6, z: 3 }
   ]);
+
+  const { link16Data, gccsData } = useDataFeeds();
 
   const handleParameterChange = useCallback((param: string, value: number) => {
     setFieldParameters(prev => ({
@@ -75,6 +92,21 @@ export const Vers3Vector = () => {
         ...prev,
         [setting]: checked
       }));
+    } else if (category === 'ew') {
+      setEwSigint(prev => ({
+        ...prev,
+        [setting]: checked
+      }));
+    } else if (category === 'qs') {
+      setQuantumSensor(prev => ({
+        ...prev,
+        [setting]: checked
+      }));
+    } else if (category === 'ht') {
+      setHypersonicThreat(prev => ({
+        ...prev,
+        [setting]: checked
+      }));
     }
 
     toast.info(`${param} ${checked ? 'enabled' : 'disabled'}`, {
@@ -84,35 +116,27 @@ export const Vers3Vector = () => {
   }, []);
 
   const handleExport = useCallback(() => {
-    const exportData = {
-      timestamp: new Date().toISOString(),
-      fieldParameters,
-      tensorOverlays,
-      drrSettings,
-      metadata: {
-        version: '4.2.1',
-        framework: 'Riemann-Cartan',
-        classification: 'DARPA-CLASSIFIED'
-      }
-    };
-
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { 
-      type: 'application/json' 
+    let csvContent = "data:text/csv;charset=utf-8,Time,Lat,Lon,Alt\n";
+    link16Data.forEach(row => {
+      const time = new Date(row.timestamp).toISOString();
+      const { lat, lon } = row.position;
+      const alt = row.altitude;
+      csvContent += `${time},${lat},${lon},${alt}\n`;
     });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `vers3vector-export-${Date.now()}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
 
-    toast.success('Simulation data exported successfully', {
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "q_cape_stk_export.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast.success('STK data exported successfully', {
       duration: 3000,
       className: 'font-scientific text-xs'
     });
-  }, [fieldParameters, tensorOverlays, drrSettings]);
+  }, [link16Data]);
 
   const handleToggleEncryption = useCallback(() => {
     setEncryptedMode(prev => !prev);
@@ -124,6 +148,17 @@ export const Vers3Vector = () => {
       }
     );
   }, [encryptedMode]);
+
+  const handleToggleDigitalTwin = useCallback(() => {
+    setDigitalTwinMode(prev => !prev);
+    toast.info(
+      digitalTwinMode ? 'Digital Twin mode disabled' : 'Digital Twin mode enabled',
+      {
+        duration: 3000,
+        className: 'font-scientific text-xs'
+      }
+    );
+  }, [digitalTwinMode]);
 
   const handleHardwareData = useCallback((data: any) => {
     setHardwareData(data);
@@ -160,7 +195,7 @@ export const Vers3Vector = () => {
         <div className="absolute top-1/2 left-1/2 w-32 h-32 bg-warning/10 rounded-full blur-xl animate-pulse delay-500"></div>
       </div>
 
-      <HeaderSection encryptedMode={encryptedMode} />
+      <HeaderSection encryptedMode={encryptedMode} digitalTwinMode={digitalTwinMode} onToggleDigitalTwin={handleToggleDigitalTwin} />
 
       <MobileNavigation
         fieldParameters={fieldParameters}
@@ -185,6 +220,9 @@ export const Vers3Vector = () => {
           fieldParameters={fieldParameters}
           tensorOverlays={tensorOverlays}
           drrSettings={drrSettings}
+          ewSigint={ewSigint}
+          quantumSensor={quantumSensor}
+          hypersonicThreat={hypersonicThreat}
           encryptedMode={encryptedMode}
           temporalSettings={temporalSettings}
           causalSettings={causalSettings}
@@ -192,6 +230,8 @@ export const Vers3Vector = () => {
           anomalyZones={anomalyZones}
           hardwareData={hardwareData}
           temporalEvents={temporalEvents}
+          link16Data={link16Data}
+          gccsData={gccsData}
           onParameterChange={handleParameterChange}
           onToggleChange={handleToggleChange}
           onExport={handleExport}
