@@ -29,7 +29,7 @@ Q-CAPE is a platform that enables real-time visualization and manipulation of mu
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/vers3vector.git
+git clone https://github.com/topherchris420/vers3vector.git
 cd vers3vector
 
 # Install dependencies
