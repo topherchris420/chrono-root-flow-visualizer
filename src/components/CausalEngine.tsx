@@ -77,8 +77,10 @@ export const CausalEngine = ({
       points.push(new Vector3(x, y, z));
     }
 
-    // Close the loop
-    points.push(points[0].clone());
+    // Close the loop - ensure we have points before cloning
+    if (points.length > 0) {
+      points.push(points[0].clone());
+    }
     return points;
   }
 
@@ -89,15 +91,18 @@ export const CausalEngine = ({
 
     causalLoops.forEach((loop1, i) => {
       causalLoops.forEach((loop2, j) => {
-        if (i !== j) {
+        if (i !== j && loop1?.path?.length > 0 && loop2?.path?.length > 0) {
           const avgDistance = loop1.path.reduce((sum, point1) => {
-            const minDist = Math.min(...loop2.path.map(point2 => point1.distanceTo(point2)));
+            if (!point1 || !loop2.path) return sum;
+            const validPoints = loop2.path.filter(point2 => point2 && typeof point2.distanceTo === 'function');
+            if (validPoints.length === 0) return sum;
+            const minDist = Math.min(...validPoints.map(point2 => point1.distanceTo(point2)));
             return sum + minDist;
           }, 0) / loop1.path.length;
 
           const feedback = Math.exp(-avgDistance * 0.1) *
-                          loop1.retrocausalFactor *
-                          loop2.retrocausalFactor *
+                          (loop1.retrocausalFactor || 0) *
+                          (loop2.retrocausalFactor || 0) *
                           causalSettings.retrocausalStrength;
 
           matrix[i][j] = feedback;
