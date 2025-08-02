@@ -77,53 +77,49 @@ export const SimulationEngine = ({
             <directionalLight position={[10, 10, 5]} intensity={0.5} />
 
             <group ref={groupRef}>
-              {/* Basic working simulation using native Three.js */}
-              
-              {/* Central energy core that responds to Energy Density */}
+              {/* Always visible test objects */}
               <mesh position={[0, 0, 0]}>
-                <sphereGeometry args={[0.5 + (fieldParameters?.energyDensity || 1) * 0.3, 16, 16]} />
+                <sphereGeometry args={[1, 16, 16]} />
+                <meshBasicMaterial color="red" wireframe />
+              </mesh>
+
+              <mesh position={[3, 0, 0]}>
+                <boxGeometry args={[1, 1, 1]} />
+                <meshBasicMaterial color="blue" />
+              </mesh>
+
+              <mesh position={[-3, 0, 0]}>
+                <cylinderGeometry args={[0.5, 0.5, 2, 8]} />
+                <meshBasicMaterial color="green" />
+              </mesh>
+
+              {/* Parameter-responsive objects with safe defaults */}
+              <mesh position={[0, 2, 0]}>
+                <sphereGeometry args={[
+                  Math.max(0.2, Math.abs(fieldParameters?.energyDensity || 1) * 0.5 + 0.5), 
+                  16, 
+                  16
+                ]} />
                 <meshBasicMaterial 
-                  color={`hsl(${200 + (fieldParameters?.energyDensity || 1) * 50}, 70%, 60%)`}
-                  wireframe 
+                  color={fieldParameters?.energyDensity > 0 ? "orange" : "purple"}
                 />
               </mesh>
 
-              {/* Orbiting particles that respond to Spin Distribution */}
-              {Array.from({ length: Math.floor(3 + (fieldParameters?.spinDistribution || 1) * 5) }, (_, i) => {
-                const angle = (i / 8) * Math.PI * 2;
-                const radius = 2 + (fieldParameters?.timeSync || 1) * 0.5;
+              {/* Orbiting objects based on spin */}
+              {Array.from({ length: Math.max(1, Math.abs(fieldParameters?.spinDistribution || 1) * 3 + 2) }, (_, i) => {
+                const angle = (i / 5) * Math.PI * 2;
+                const radius = 4;
                 return (
                   <mesh 
                     key={i}
                     position={[
                       Math.cos(angle) * radius,
-                      Math.sin(angle * 2) * 0.5,
+                      0,
                       Math.sin(angle) * radius
                     ]}
                   >
-                    <boxGeometry args={[0.1, 0.1, 0.1]} />
-                    <meshBasicMaterial 
-                      color={`hsl(${300 + i * 30}, 80%, 70%)`}
-                    />
-                  </mesh>
-                );
-              })}
-
-              {/* Field lines that respond to EM Field Torsion */}
-              {Array.from({ length: Math.floor(2 + (fieldParameters?.emFieldTorsion || 1) * 3) }, (_, i) => {
-                const radius = 1.5 + i * 0.5;
-                return (
-                  <mesh 
-                    key={`ring-${i}`}
-                    position={[0, 0, 0]}
-                    rotation={[Math.PI / 2, 0, i * Math.PI / 4]}
-                  >
-                    <ringGeometry args={[radius, radius + 0.05, 32]} />
-                    <meshBasicMaterial 
-                      color={`hsl(${120 + i * 60}, 60%, 50%)`}
-                      transparent
-                      opacity={0.6}
-                    />
+                    <sphereGeometry args={[0.2, 8, 8]} />
+                    <meshBasicMaterial color="yellow" />
                   </mesh>
                 );
               })}
