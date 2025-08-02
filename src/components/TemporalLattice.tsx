@@ -135,8 +135,12 @@ export const TemporalLattice = ({
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
-            array={new Float32Array(computeTemporalManifold.latticePoints.flatMap(p => [p.x, p.y, p.z]))}
-            count={computeTemporalManifold.latticePoints.length}
+            array={new Float32Array(
+              computeTemporalManifold.latticePoints
+                .filter(p => p && typeof p.x === 'number' && !isNaN(p.x))
+                .flatMap(p => [p.x, p.y, p.z])
+            )}
+            count={computeTemporalManifold.latticePoints.filter(p => p && typeof p.x === 'number' && !isNaN(p.x)).length}
             itemSize={3}
           />
         </bufferGeometry>
@@ -152,7 +156,7 @@ export const TemporalLattice = ({
       {timelines.map((timeline) => (
         <group key={timeline.id}>
           {/* Timeline DRR evolution path */}
-          {timeline.drrEvolution.length > 1 && (
+          {timeline.drrEvolution.length > 1 && timeline.drrEvolution.every(point => point && typeof point.x === 'number') && (
             <Line
               points={timeline.drrEvolution}
               color={new Color().setHSL(timeline.phase * 0.1, 0.8, timeline.coherenceLevel)}

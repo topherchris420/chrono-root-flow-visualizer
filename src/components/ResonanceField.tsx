@@ -199,7 +199,10 @@ export const ResonanceField = ({
       ))}
 
       {/* Connection lines between resonance roots */}
-      {connectionLines.map((line) => (
+      {connectionLines.filter(line => 
+        line && line.start && line.end && 
+        typeof line.start.x === 'number' && typeof line.end.x === 'number'
+      ).map((line) => (
         <Line
           key={line.key}
           points={[line.start, line.end]}
