@@ -100,82 +100,23 @@ export const SimulationEngine = ({
             />
 
             <group ref={groupRef}>
-              {/* Safe test mesh with validated props */}
-              <mesh position={[0, 0, 0]}>
+              {/* Minimal safe rendering - only basic Three.js primitives */}
+              <mesh>
                 <boxGeometry args={[1, 1, 1]} />
-                <meshBasicMaterial color="#00ff00" />
+                <meshBasicMaterial color="green" />
+              </mesh>
+              
+              <mesh position={[2, 0, 0]}>
+                <sphereGeometry args={[0.5, 16, 16]} />
+                <meshBasicMaterial color="blue" />
               </mesh>
 
-              {/* Only render components with strict prop validation */}
-              {fieldParameters && 
-               typeof fieldParameters.energyDensity === 'number' && 
-               typeof fieldParameters.timeSync === 'number' && 
-               typeof fieldParameters.spinDistribution === 'number' &&
-               !isNaN(fieldParameters.energyDensity) && 
-               !isNaN(fieldParameters.timeSync) && 
-               !isNaN(fieldParameters.spinDistribution) && 
-               fieldParameters.energyDensity > 0 && 
-               fieldParameters.timeSync >= 0 && 
-               fieldParameters.spinDistribution >= 0 && 
-               fieldParameters.energyDensity < 100 &&
-               fieldParameters.timeSync < 100 &&
-               fieldParameters.spinDistribution < 100 && (
-                <VectorField 
-                  energyDensity={fieldParameters.energyDensity}
-                  timeSync={fieldParameters.timeSync}
-                  spinDistribution={fieldParameters.spinDistribution}
-                />
+              {/* Temporarily disable all complex components until we fix the core issue */}
+              {false && fieldParameters && (
+                <group>
+                  {/* All complex components disabled */}
+                </group>
               )}
-
-              {/* Tensor overlays with strict validation */}
-              {tensorOverlays?.ricci && fieldParameters && 
-               typeof fieldParameters.emFieldTorsion === 'number' &&
-               !isNaN(fieldParameters.emFieldTorsion) &&
-               fieldParameters.emFieldTorsion >= 0 &&
-               fieldParameters.emFieldTorsion < 100 && (
-                <TensorOverlay 
-                  type="ricci" 
-                  intensity={fieldParameters.emFieldTorsion}
-                />
-              )}
-              
-              {tensorOverlays?.torsion && fieldParameters && 
-               typeof fieldParameters.emFieldTorsion === 'number' &&
-               !isNaN(fieldParameters.emFieldTorsion) &&
-               fieldParameters.emFieldTorsion >= 0 &&
-               fieldParameters.emFieldTorsion < 100 && (
-                <TensorOverlay 
-                  type="torsion" 
-                  intensity={fieldParameters.emFieldTorsion}
-                />
-              )}
-              
-              {tensorOverlays?.divergence && fieldParameters && 
-               typeof fieldParameters.energyDensity === 'number' &&
-               !isNaN(fieldParameters.energyDensity) &&
-               fieldParameters.energyDensity >= 0 &&
-               fieldParameters.energyDensity < 100 && (
-                <TensorOverlay 
-                  type="divergence" 
-                  intensity={fieldParameters.energyDensity}
-                />
-              )}
-
-              {/* Dynamic Resonance Rooting with validation */}
-              {drrSettings?.resonanceRoots && fieldParameters && 
-               typeof fieldParameters.energyDensity === 'number' &&
-               !isNaN(fieldParameters.energyDensity) &&
-               fieldParameters.energyDensity >= 0 &&
-               fieldParameters.energyDensity < 100 && (
-                <ResonanceField 
-                  adaptiveAnchors={Boolean(drrSettings.adaptiveAnchors)}
-                  phaseTracking={Boolean(drrSettings.phaseTracking)}
-                  fieldStrength={fieldParameters.energyDensity}
-                />
-              )}
-
-              {/* Extended render components */}
-              {renderExtensions}
             </group>
 
             {/* Orbital controls for navigation */}
