@@ -100,14 +100,8 @@ export const SimulationEngine = ({
             />
 
             <group ref={groupRef}>
-              {/* Basic test mesh to isolate the issue */}
-              <mesh position={[0, 0, 0]}>
-                <boxGeometry args={[1, 1, 1]} />
-                <meshBasicMaterial color="#00ff00" />
-              </mesh>
-
-              {/* Only render components if they pass strict validation */}
-              {false && fieldParameters && 
+              {/* 4D Vector Field Visualization */}
+              {fieldParameters && 
                !isNaN(fieldParameters.energyDensity) && 
                !isNaN(fieldParameters.timeSync) && 
                !isNaN(fieldParameters.spinDistribution) && (
@@ -118,13 +112,37 @@ export const SimulationEngine = ({
                 />
               )}
 
-              {/* Temporarily disable all other components */}
-              {false && tensorOverlays?.ricci && (
+              {/* Tensor Overlays */}
+              {tensorOverlays?.ricci && fieldParameters && !isNaN(fieldParameters.emFieldTorsion) && (
                 <TensorOverlay 
                   type="ricci" 
                   intensity={fieldParameters.emFieldTorsion}
                 />
               )}
+              {tensorOverlays?.torsion && fieldParameters && !isNaN(fieldParameters.emFieldTorsion) && (
+                <TensorOverlay 
+                  type="torsion" 
+                  intensity={fieldParameters.emFieldTorsion}
+                />
+              )}
+              {tensorOverlays?.divergence && fieldParameters && !isNaN(fieldParameters.energyDensity) && (
+                <TensorOverlay 
+                  type="divergence" 
+                  intensity={fieldParameters.energyDensity}
+                />
+              )}
+
+              {/* Dynamic Resonance Rooting */}
+              {drrSettings?.resonanceRoots && fieldParameters && !isNaN(fieldParameters.energyDensity) && (
+                <ResonanceField 
+                  adaptiveAnchors={Boolean(drrSettings.adaptiveAnchors)}
+                  phaseTracking={Boolean(drrSettings.phaseTracking)}
+                  fieldStrength={fieldParameters.energyDensity}
+                />
+              )}
+
+              {/* Extended render components */}
+              {renderExtensions}
             </group>
 
             {/* Orbital controls for navigation */}
