@@ -120,7 +120,11 @@ export const VectorField = ({ energyDensity, timeSync, spinDistribution }: Vecto
   return (
     <group ref={groupRef}>
       {/* Vector field lines */}
-      {vectorArrows.map((arrow) => (
+      {vectorArrows.filter(arrow => 
+        arrow && arrow.start && arrow.end && 
+        typeof arrow.start.x === 'number' && typeof arrow.end.x === 'number' &&
+        !isNaN(arrow.start.x) && !isNaN(arrow.end.x)
+      ).map((arrow) => (
         <Line
           key={arrow.key}
           points={[arrow.start, arrow.end]}
@@ -174,7 +178,9 @@ export const VectorField = ({ energyDensity, timeSync, spinDistribution }: Vecto
               radius * Math.sin(s + t) + curvature * Math.cos(s * 2),
               2 * Math.sin(s * 2 + t) + curvature * Math.sin(s)
             );
-          });
+          }).filter(point => point && typeof point.x === 'number' && !isNaN(point.x));
+
+          if (points.length < 2) return null;
 
           return (
             <Line

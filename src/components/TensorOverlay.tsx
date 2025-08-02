@@ -74,11 +74,16 @@ export const TensorOverlay = ({ type, intensity }: TensorOverlayProps) => {
 
   return (
     <group ref={groupRef}>
-      {tensorPoints.map((point, index) => (
+      {tensorPoints.filter(point => 
+        point && point.position && Array.isArray(point.position) && 
+        point.position.length === 3 && 
+        point.position.every(coord => typeof coord === 'number' && !isNaN(coord)) &&
+        typeof point.size === 'number' && !isNaN(point.size) && point.size > 0
+      ).map((point, index) => (
         <Sphere
           key={`${type}-${index}`}
           position={point.position as [number, number, number]}
-          args={[point.size * 0.3, 8, 8]}
+          args={[Math.max(point.size * 0.3, 0.01), 8, 8]}
         >
           <meshBasicMaterial
             color={tensorColors[type]}
