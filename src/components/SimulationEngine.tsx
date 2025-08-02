@@ -101,26 +101,30 @@ export const SimulationEngine = ({
 
             <group ref={groupRef}>
               {/* 4D Vector Field Visualization */}
-              <VectorField 
-                energyDensity={fieldParameters.energyDensity}
-                timeSync={fieldParameters.timeSync}
-                spinDistribution={fieldParameters.spinDistribution}
-              />
+              {fieldParameters && typeof fieldParameters.energyDensity === 'number' && 
+               typeof fieldParameters.timeSync === 'number' && 
+               typeof fieldParameters.spinDistribution === 'number' && (
+                <VectorField 
+                  energyDensity={fieldParameters.energyDensity}
+                  timeSync={fieldParameters.timeSync}
+                  spinDistribution={fieldParameters.spinDistribution}
+                />
+              )}
 
               {/* Tensor Overlays */}
-              {tensorOverlays.ricci && (
+              {tensorOverlays?.ricci && fieldParameters && typeof fieldParameters.emFieldTorsion === 'number' && (
                 <TensorOverlay 
                   type="ricci" 
                   intensity={fieldParameters.emFieldTorsion}
                 />
               )}
-              {tensorOverlays.torsion && (
+              {tensorOverlays?.torsion && fieldParameters && typeof fieldParameters.emFieldTorsion === 'number' && (
                 <TensorOverlay 
                   type="torsion" 
                   intensity={fieldParameters.emFieldTorsion}
                 />
               )}
-              {tensorOverlays.divergence && (
+              {tensorOverlays?.divergence && fieldParameters && typeof fieldParameters.energyDensity === 'number' && (
                 <TensorOverlay 
                   type="divergence" 
                   intensity={fieldParameters.energyDensity}
@@ -128,10 +132,10 @@ export const SimulationEngine = ({
               )}
 
               {/* Dynamic Resonance Rooting */}
-              {drrSettings.resonanceRoots && (
+              {drrSettings?.resonanceRoots && fieldParameters && typeof fieldParameters.energyDensity === 'number' && (
                 <ResonanceField 
-                  adaptiveAnchors={drrSettings.adaptiveAnchors}
-                  phaseTracking={drrSettings.phaseTracking}
+                  adaptiveAnchors={Boolean(drrSettings.adaptiveAnchors)}
+                  phaseTracking={Boolean(drrSettings.phaseTracking)}
                   fieldStrength={fieldParameters.energyDensity}
                 />
               )}
