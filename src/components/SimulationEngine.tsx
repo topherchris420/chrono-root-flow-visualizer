@@ -100,23 +100,62 @@ export const SimulationEngine = ({
             />
 
             <group ref={groupRef}>
-              {/* Minimal safe rendering - only basic Three.js primitives */}
-              <mesh>
-                <boxGeometry args={[1, 1, 1]} />
-                <meshBasicMaterial color="green" />
-              </mesh>
-              
-              <mesh position={[2, 0, 0]}>
-                <sphereGeometry args={[0.5, 16, 16]} />
-                <meshBasicMaterial color="blue" />
-              </mesh>
-
-              {/* Temporarily disable all complex components until we fix the core issue */}
-              {false && fieldParameters && (
-                <group>
-                  {/* All complex components disabled */}
-                </group>
+              {/* Physics-responsive components */}
+              {fieldParameters && 
+               typeof fieldParameters.energyDensity === 'number' && 
+               typeof fieldParameters.timeSync === 'number' && 
+               typeof fieldParameters.spinDistribution === 'number' &&
+               !isNaN(fieldParameters.energyDensity) && 
+               !isNaN(fieldParameters.timeSync) && 
+               !isNaN(fieldParameters.spinDistribution) && (
+                <VectorField 
+                  energyDensity={fieldParameters.energyDensity}
+                  timeSync={fieldParameters.timeSync}
+                  spinDistribution={fieldParameters.spinDistribution}
+                />
               )}
+
+              {/* Tensor overlays that respond to EM Field Torsion */}
+              {tensorOverlays?.ricci && fieldParameters && 
+               typeof fieldParameters.emFieldTorsion === 'number' &&
+               !isNaN(fieldParameters.emFieldTorsion) && (
+                <TensorOverlay 
+                  type="ricci" 
+                  intensity={fieldParameters.emFieldTorsion}
+                />
+              )}
+              
+              {tensorOverlays?.torsion && fieldParameters && 
+               typeof fieldParameters.emFieldTorsion === 'number' &&
+               !isNaN(fieldParameters.emFieldTorsion) && (
+                <TensorOverlay 
+                  type="torsion" 
+                  intensity={fieldParameters.emFieldTorsion}
+                />
+              )}
+              
+              {tensorOverlays?.divergence && fieldParameters && 
+               typeof fieldParameters.energyDensity === 'number' &&
+               !isNaN(fieldParameters.energyDensity) && (
+                <TensorOverlay 
+                  type="divergence" 
+                  intensity={fieldParameters.energyDensity}
+                />
+              )}
+
+              {/* Resonance field that responds to Energy Density */}
+              {drrSettings?.resonanceRoots && fieldParameters && 
+               typeof fieldParameters.energyDensity === 'number' &&
+               !isNaN(fieldParameters.energyDensity) && (
+                <ResonanceField 
+                  adaptiveAnchors={Boolean(drrSettings.adaptiveAnchors)}
+                  phaseTracking={Boolean(drrSettings.phaseTracking)}
+                  fieldStrength={fieldParameters.energyDensity}
+                />
+              )}
+
+              {/* Extended render components */}
+              {renderExtensions}
             </group>
 
             {/* Orbital controls for navigation */}
