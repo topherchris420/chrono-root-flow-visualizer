@@ -72,81 +72,16 @@ export const SimulationEngine = ({
           }}
         >
           <Suspense fallback={null}>
-            {/* Ambient and directional lighting for scientific visualization */}
-            <ambientLight intensity={0.2} color="#00ccff" />
-            <directionalLight 
-              position={[10, 10, 5]} 
-              intensity={0.5} 
-              color="#ffffff"
-              castShadow
-            />
-            <pointLight 
-              position={[0, 0, 0]} 
-              intensity={0.3} 
-              color="#ff6600"
-            />
-
-            {/* Reference grid for spatial coordinates */}
-            <Grid 
-              args={[20, 20]} 
-              cellSize={1} 
-              cellThickness={0.5} 
-              cellColor="#00ccff" 
-              sectionSize={5} 
-              sectionThickness={1} 
-              sectionColor="#ff6600"
-              fadeDistance={50}
-              fadeStrength={1}
-            />
+            {/* Basic lighting only */}
+            <ambientLight intensity={0.5} />
+            <directionalLight position={[10, 10, 5]} intensity={0.5} />
 
             <group ref={groupRef}>
-              {/* Working minimal state */}
-              <mesh>
-                <boxGeometry args={[1, 1, 1]} />
-                <meshBasicMaterial color="green" />
-              </mesh>
-
-              {/* Test one component at a time - starting with VectorField only */}
-              {false && fieldParameters && (
-                <VectorField 
-                  energyDensity={fieldParameters.energyDensity || 1}
-                  timeSync={fieldParameters.timeSync || 1}
-                  spinDistribution={fieldParameters.spinDistribution || 1}
-                />
-              )}
-
-              {/* All other components disabled for now */}
-              {false && tensorOverlays?.ricci && (
-                <TensorOverlay 
-                  type="ricci" 
-                  intensity={1}
-                />
-              )}
-
-              {false && drrSettings?.resonanceRoots && (
-                <ResonanceField 
-                  adaptiveAnchors={false}
-                  phaseTracking={false}
-                  fieldStrength={1}
-                />
-              )}
-
-              {/* Extended render components */}
-              {renderExtensions}
+              {/* Completely empty scene to test Canvas setup */}
             </group>
 
-            {/* Orbital controls for navigation */}
-            <OrbitControls
-              enablePan={true}
-              enableZoom={true}
-              enableRotate={true}
-              dampingFactor={0.05}
-              rotateSpeed={0.5}
-              zoomSpeed={0.8}
-            />
-
-            {/* Performance statistics */}
-            <Stats />
+            {/* Basic orbit controls */}
+            <OrbitControls />
           </Suspense>
         </Canvas>
 
