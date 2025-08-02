@@ -162,13 +162,19 @@ export const CausalEngine = ({
     }
 
     // Send causal data updates
-    if (onCausalDataUpdate) {
+    if (onCausalDataUpdate && causalLoops.length > 0) {
+      const validLoops = causalLoops.filter(loop => loop && typeof loop.strength === 'number');
+      const averageStrength = validLoops.length > 0 
+        ? validLoops.reduce((sum, loop) => sum + loop.strength, 0) / validLoops.length 
+        : 0;
+      const retrocausalEnergy = validLoops.reduce((sum, loop) => sum + (loop.retrocausalFactor || 0), 0);
+
       onCausalDataUpdate({
         loopCount: causalLoops.length,
-        averageStrength: causalLoops.reduce((sum, loop) => sum + loop.strength, 0) / causalLoops.length,
+        averageStrength,
         feedbackMatrix: computeFeedbackMatrix,
         anomalyCount: torsionAnomalies.length,
-        retrocausalEnergy: causalLoops.reduce((sum, loop) => sum + loop.retrocausalFactor, 0)
+        retrocausalEnergy
       });
     }
   });
