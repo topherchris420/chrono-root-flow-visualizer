@@ -1,4 +1,4 @@
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Grid, Stats } from '@react-three/drei';
 import { Suspense, useRef, useState, useEffect } from 'react';
 import { Vector3, Group } from 'three';
@@ -35,22 +35,27 @@ export const SimulationEngine = ({
   renderExtensions 
 }: SimulationEngineProps) => {
   const groupRef = useRef<Group>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Animation
-  useFrame((state) => {
-    if (groupRef.current) {
-      // Rotate the entire simulation
-      groupRef.current.rotation.y += 0.01;
-      
-      // Make the group pulse based on energy density
-      const scale = 1 + Math.sin(state.clock.elapsedTime * 2) * (fieldParameters?.energyDensity || 1) * 0.3;
-      groupRef.current.scale.setScalar(scale);
-    }
-  });
+  useEffect(() => {
+    // Simulate initialization delay for physics engine
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <Card className="w-full h-full bg-card/50 backdrop-blur-sm border-border/50">
       <div className="relative w-full h-full">
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center z-10 bg-background/80">
+            <div className="flex flex-col items-center gap-4">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <span className="font-scientific text-sm text-muted-foreground">
+                Initializing Riemann-Cartan Framework...
+              </span>
+            </div>
+          </div>
+        )}
         
         <Canvas
           camera={{ 
@@ -88,52 +93,33 @@ export const SimulationEngine = ({
                 <meshBasicMaterial color="green" />
               </mesh>
 
-              {/* DRAMATIC parameter-responsive objects */}
+              {/* Parameter-responsive objects with safe defaults */}
               <mesh position={[0, 2, 0]}>
                 <sphereGeometry args={[
-                  Math.max(0.1, Math.abs(fieldParameters?.energyDensity || 1) * 2 + 0.5), 
+                  Math.max(0.2, Math.abs(fieldParameters?.energyDensity || 1) * 0.5 + 0.5), 
                   16, 
                   16
                 ]} />
                 <meshBasicMaterial 
-                  color={fieldParameters?.energyDensity > 0 ? "#ff4400" : "#8800ff"}
+                  color={fieldParameters?.energyDensity > 0 ? "orange" : "purple"}
                 />
               </mesh>
 
-              {/* Many orbiting objects that change dramatically with spin */}
-              {Array.from({ length: Math.max(1, Math.floor(Math.abs(fieldParameters?.spinDistribution || 1) * 10 + 3)) }, (_, i) => {
-                const angle = (i / 8) * Math.PI * 2;
-                const radius = 3 + Math.abs(fieldParameters?.timeSync || 1) * 0.5;
+              {/* Orbiting objects based on spin */}
+              {Array.from({ length: Math.max(1, Math.abs(fieldParameters?.spinDistribution || 1) * 3 + 2) }, (_, i) => {
+                const angle = (i / 5) * Math.PI * 2;
+                const radius = 4;
                 return (
                   <mesh 
                     key={i}
                     position={[
                       Math.cos(angle) * radius,
-                      Math.sin(i) * (fieldParameters?.emFieldTorsion || 1),
+                      0,
                       Math.sin(angle) * radius
                     ]}
                   >
-                    <sphereGeometry args={[0.1 + Math.abs(fieldParameters?.spinDistribution || 0) * 0.3, 8, 8]} />
-                    <meshBasicMaterial color={`hsl(${i * 40}, 80%, 60%)`} />
-                  </mesh>
-                );
-              })}
-
-              {/* Field rings that change with EM Field Torsion */}
-              {Array.from({ length: Math.max(1, Math.floor(Math.abs(fieldParameters?.emFieldTorsion || 1) * 3)) }, (_, i) => {
-                const radius = 1 + i * 0.8;
-                return (
-                  <mesh 
-                    key={`ring-${i}`}
-                    position={[0, 0, 0]}
-                    rotation={[Math.PI / 2, 0, i * Math.PI / 4]}
-                  >
-                    <ringGeometry args={[radius, radius + 0.1, 16]} />
-                    <meshBasicMaterial 
-                      color={`hsl(${120 + i * 60}, 100%, 50%)`}
-                      transparent
-                      opacity={0.7}
-                    />
+                    <sphereGeometry args={[0.2, 8, 8]} />
+                    <meshBasicMaterial color="yellow" />
                   </mesh>
                 );
               })}
