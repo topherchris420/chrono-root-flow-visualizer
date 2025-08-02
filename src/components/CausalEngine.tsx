@@ -182,11 +182,11 @@ export const CausalEngine = ({
   return (
     <group ref={groupRef}>
       {/* Causal loop visualizations */}
-      {causalLoops.map((loop) => (
+      {causalLoops.filter(loop => loop && loop.path && loop.path.length > 1).map((loop) => (
         <group key={loop.id}>
           {/* Main causal loop path */}
           <Line
-            points={loop.path}
+            points={loop.path.filter(point => point && typeof point.x === 'number')}
             color={new Color().setHSL(0.8 - loop.strength * 0.3, 0.9, 0.5 + loop.strength * 0.3)}
             lineWidth={loop.strength * 4}
             transparent
@@ -196,9 +196,11 @@ export const CausalEngine = ({
           {/* Echo loops for retrocausal visualization */}
           {Array.from({ length: loop.echoDepth }, (_, echoIndex) => {
             const echoStrength = loop.strength * Math.pow(0.7, echoIndex + 1);
-            const echoPath = loop.path.map(point =>
-              point.clone().multiplyScalar(1 + (echoIndex + 1) * 0.1)
-            );
+            const echoPath = loop.path
+              .filter(point => point && typeof point.x === 'number')
+              .map(point => point.clone().multiplyScalar(1 + (echoIndex + 1) * 0.1));
+
+            if (echoPath.length < 2) return null;
 
             return (
               <Line
@@ -213,23 +215,25 @@ export const CausalEngine = ({
           })}
 
           {/* Loop nodes for phase tracking */}
-          {loop.path.slice(0, -1).map((point, pointIndex) => {
-            const phaseIntensity = Math.sin(pointIndex * 0.5 + loop.temporalPhase) * 0.5 + 0.5;
+          {loop.path.slice(0, -1)
+            .filter(point => point && typeof point.x === 'number')
+            .map((point, pointIndex) => {
+              const phaseIntensity = Math.sin(pointIndex * 0.5 + loop.temporalPhase) * 0.5 + 0.5;
 
-            return (
-              <Sphere
-                key={`node-${pointIndex}`}
-                position={[point.x, point.y, point.z]}
-                args={[0.05 + phaseIntensity * 0.1, 6, 6]}
-              >
-                <meshBasicMaterial
-                  color={new Color().setHSL(0.8, 0.9, phaseIntensity)}
-                  transparent
-                  opacity={0.8}
-                />
-              </Sphere>
-            );
-          })}
+              return (
+                <Sphere
+                  key={`node-${pointIndex}`}
+                  position={[point.x, point.y, point.z]}
+                  args={[0.05 + phaseIntensity * 0.1, 6, 6]}
+                >
+                  <meshBasicMaterial
+                    color={new Color().setHSL(0.8, 0.9, phaseIntensity)}
+                    transparent
+                    opacity={0.8}
+                  />
+                </Sphere>
+              );
+            })}
         </group>
       ))}
 
@@ -266,13 +270,17 @@ export const CausalEngine = ({
       {/* Feedback visualization between loops */}
       {causalLoops.map((loop1, i) =>
         causalLoops.map((loop2, j) => {
-          if (i >= j) return null;
+          if (i >= j || !loop1?.path?.length || !loop2?.path?.length) return null;
 
           const feedbackStrength = computeFeedbackMatrix[i]?.[j] || 0;
           if (feedbackStrength < 0.1) return null;
 
           const midpoint1 = loop1.path[Math.floor(loop1.path.length / 2)];
           const midpoint2 = loop2.path[Math.floor(loop2.path.length / 2)];
+
+          if (!midpoint1 || !midpoint2 || typeof midpoint1.x !== 'number' || typeof midpoint2.x !== 'number') {
+            return null;
+          }
 
           return (
             <Line
