@@ -100,57 +100,34 @@ export const SimulationEngine = ({
             />
 
             <group ref={groupRef}>
-              {/* Physics-responsive components */}
-              {fieldParameters && 
-               typeof fieldParameters.energyDensity === 'number' && 
-               typeof fieldParameters.timeSync === 'number' && 
-               typeof fieldParameters.spinDistribution === 'number' &&
-               !isNaN(fieldParameters.energyDensity) && 
-               !isNaN(fieldParameters.timeSync) && 
-               !isNaN(fieldParameters.spinDistribution) && (
+              {/* Working minimal state */}
+              <mesh>
+                <boxGeometry args={[1, 1, 1]} />
+                <meshBasicMaterial color="green" />
+              </mesh>
+
+              {/* Test one component at a time - starting with VectorField only */}
+              {false && fieldParameters && (
                 <VectorField 
-                  energyDensity={fieldParameters.energyDensity}
-                  timeSync={fieldParameters.timeSync}
-                  spinDistribution={fieldParameters.spinDistribution}
+                  energyDensity={fieldParameters.energyDensity || 1}
+                  timeSync={fieldParameters.timeSync || 1}
+                  spinDistribution={fieldParameters.spinDistribution || 1}
                 />
               )}
 
-              {/* Tensor overlays that respond to EM Field Torsion */}
-              {tensorOverlays?.ricci && fieldParameters && 
-               typeof fieldParameters.emFieldTorsion === 'number' &&
-               !isNaN(fieldParameters.emFieldTorsion) && (
+              {/* All other components disabled for now */}
+              {false && tensorOverlays?.ricci && (
                 <TensorOverlay 
                   type="ricci" 
-                  intensity={fieldParameters.emFieldTorsion}
-                />
-              )}
-              
-              {tensorOverlays?.torsion && fieldParameters && 
-               typeof fieldParameters.emFieldTorsion === 'number' &&
-               !isNaN(fieldParameters.emFieldTorsion) && (
-                <TensorOverlay 
-                  type="torsion" 
-                  intensity={fieldParameters.emFieldTorsion}
-                />
-              )}
-              
-              {tensorOverlays?.divergence && fieldParameters && 
-               typeof fieldParameters.energyDensity === 'number' &&
-               !isNaN(fieldParameters.energyDensity) && (
-                <TensorOverlay 
-                  type="divergence" 
-                  intensity={fieldParameters.energyDensity}
+                  intensity={1}
                 />
               )}
 
-              {/* Resonance field that responds to Energy Density */}
-              {drrSettings?.resonanceRoots && fieldParameters && 
-               typeof fieldParameters.energyDensity === 'number' &&
-               !isNaN(fieldParameters.energyDensity) && (
+              {false && drrSettings?.resonanceRoots && (
                 <ResonanceField 
-                  adaptiveAnchors={Boolean(drrSettings.adaptiveAnchors)}
-                  phaseTracking={Boolean(drrSettings.phaseTracking)}
-                  fieldStrength={fieldParameters.energyDensity}
+                  adaptiveAnchors={false}
+                  phaseTracking={false}
+                  fieldStrength={1}
                 />
               )}
 
