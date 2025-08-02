@@ -100,10 +100,17 @@ export const SimulationEngine = ({
             />
 
             <group ref={groupRef}>
-              {/* 4D Vector Field Visualization */}
-              {fieldParameters && typeof fieldParameters.energyDensity === 'number' && 
-               typeof fieldParameters.timeSync === 'number' && 
-               typeof fieldParameters.spinDistribution === 'number' && (
+              {/* Basic test mesh to isolate the issue */}
+              <mesh position={[0, 0, 0]}>
+                <boxGeometry args={[1, 1, 1]} />
+                <meshBasicMaterial color="#00ff00" />
+              </mesh>
+
+              {/* Only render components if they pass strict validation */}
+              {false && fieldParameters && 
+               !isNaN(fieldParameters.energyDensity) && 
+               !isNaN(fieldParameters.timeSync) && 
+               !isNaN(fieldParameters.spinDistribution) && (
                 <VectorField 
                   energyDensity={fieldParameters.energyDensity}
                   timeSync={fieldParameters.timeSync}
@@ -111,37 +118,13 @@ export const SimulationEngine = ({
                 />
               )}
 
-              {/* Tensor Overlays */}
-              {tensorOverlays?.ricci && fieldParameters && typeof fieldParameters.emFieldTorsion === 'number' && (
+              {/* Temporarily disable all other components */}
+              {false && tensorOverlays?.ricci && (
                 <TensorOverlay 
                   type="ricci" 
                   intensity={fieldParameters.emFieldTorsion}
                 />
               )}
-              {tensorOverlays?.torsion && fieldParameters && typeof fieldParameters.emFieldTorsion === 'number' && (
-                <TensorOverlay 
-                  type="torsion" 
-                  intensity={fieldParameters.emFieldTorsion}
-                />
-              )}
-              {tensorOverlays?.divergence && fieldParameters && typeof fieldParameters.energyDensity === 'number' && (
-                <TensorOverlay 
-                  type="divergence" 
-                  intensity={fieldParameters.energyDensity}
-                />
-              )}
-
-              {/* Dynamic Resonance Rooting */}
-              {drrSettings?.resonanceRoots && fieldParameters && typeof fieldParameters.energyDensity === 'number' && (
-                <ResonanceField 
-                  adaptiveAnchors={Boolean(drrSettings.adaptiveAnchors)}
-                  phaseTracking={Boolean(drrSettings.phaseTracking)}
-                  fieldStrength={fieldParameters.energyDensity}
-                />
-              )}
-
-              {/* Extended render components */}
-              {renderExtensions}
             </group>
 
             {/* Orbital controls for navigation */}
