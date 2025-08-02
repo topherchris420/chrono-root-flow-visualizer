@@ -100,11 +100,26 @@ export const SimulationEngine = ({
             />
 
             <group ref={groupRef}>
-              {/* 4D Vector Field Visualization */}
+              {/* Safe test mesh with validated props */}
+              <mesh position={[0, 0, 0]}>
+                <boxGeometry args={[1, 1, 1]} />
+                <meshBasicMaterial color="#00ff00" />
+              </mesh>
+
+              {/* Only render components with strict prop validation */}
               {fieldParameters && 
+               typeof fieldParameters.energyDensity === 'number' && 
+               typeof fieldParameters.timeSync === 'number' && 
+               typeof fieldParameters.spinDistribution === 'number' &&
                !isNaN(fieldParameters.energyDensity) && 
                !isNaN(fieldParameters.timeSync) && 
-               !isNaN(fieldParameters.spinDistribution) && (
+               !isNaN(fieldParameters.spinDistribution) && 
+               fieldParameters.energyDensity > 0 && 
+               fieldParameters.timeSync >= 0 && 
+               fieldParameters.spinDistribution >= 0 && 
+               fieldParameters.energyDensity < 100 &&
+               fieldParameters.timeSync < 100 &&
+               fieldParameters.spinDistribution < 100 && (
                 <VectorField 
                   energyDensity={fieldParameters.energyDensity}
                   timeSync={fieldParameters.timeSync}
@@ -112,28 +127,46 @@ export const SimulationEngine = ({
                 />
               )}
 
-              {/* Tensor Overlays */}
-              {tensorOverlays?.ricci && fieldParameters && !isNaN(fieldParameters.emFieldTorsion) && (
+              {/* Tensor overlays with strict validation */}
+              {tensorOverlays?.ricci && fieldParameters && 
+               typeof fieldParameters.emFieldTorsion === 'number' &&
+               !isNaN(fieldParameters.emFieldTorsion) &&
+               fieldParameters.emFieldTorsion >= 0 &&
+               fieldParameters.emFieldTorsion < 100 && (
                 <TensorOverlay 
                   type="ricci" 
                   intensity={fieldParameters.emFieldTorsion}
                 />
               )}
-              {tensorOverlays?.torsion && fieldParameters && !isNaN(fieldParameters.emFieldTorsion) && (
+              
+              {tensorOverlays?.torsion && fieldParameters && 
+               typeof fieldParameters.emFieldTorsion === 'number' &&
+               !isNaN(fieldParameters.emFieldTorsion) &&
+               fieldParameters.emFieldTorsion >= 0 &&
+               fieldParameters.emFieldTorsion < 100 && (
                 <TensorOverlay 
                   type="torsion" 
                   intensity={fieldParameters.emFieldTorsion}
                 />
               )}
-              {tensorOverlays?.divergence && fieldParameters && !isNaN(fieldParameters.energyDensity) && (
+              
+              {tensorOverlays?.divergence && fieldParameters && 
+               typeof fieldParameters.energyDensity === 'number' &&
+               !isNaN(fieldParameters.energyDensity) &&
+               fieldParameters.energyDensity >= 0 &&
+               fieldParameters.energyDensity < 100 && (
                 <TensorOverlay 
                   type="divergence" 
                   intensity={fieldParameters.energyDensity}
                 />
               )}
 
-              {/* Dynamic Resonance Rooting */}
-              {drrSettings?.resonanceRoots && fieldParameters && !isNaN(fieldParameters.energyDensity) && (
+              {/* Dynamic Resonance Rooting with validation */}
+              {drrSettings?.resonanceRoots && fieldParameters && 
+               typeof fieldParameters.energyDensity === 'number' &&
+               !isNaN(fieldParameters.energyDensity) &&
+               fieldParameters.energyDensity >= 0 &&
+               fieldParameters.energyDensity < 100 && (
                 <ResonanceField 
                   adaptiveAnchors={Boolean(drrSettings.adaptiveAnchors)}
                   phaseTracking={Boolean(drrSettings.phaseTracking)}
