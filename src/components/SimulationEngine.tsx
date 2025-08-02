@@ -77,7 +77,56 @@ export const SimulationEngine = ({
             <directionalLight position={[10, 10, 5]} intensity={0.5} />
 
             <group ref={groupRef}>
-              {/* Completely empty scene to test Canvas setup */}
+              {/* Basic working simulation using native Three.js */}
+              
+              {/* Central energy core that responds to Energy Density */}
+              <mesh position={[0, 0, 0]}>
+                <sphereGeometry args={[0.5 + (fieldParameters?.energyDensity || 1) * 0.3, 16, 16]} />
+                <meshBasicMaterial 
+                  color={`hsl(${200 + (fieldParameters?.energyDensity || 1) * 50}, 70%, 60%)`}
+                  wireframe 
+                />
+              </mesh>
+
+              {/* Orbiting particles that respond to Spin Distribution */}
+              {Array.from({ length: Math.floor(3 + (fieldParameters?.spinDistribution || 1) * 5) }, (_, i) => {
+                const angle = (i / 8) * Math.PI * 2;
+                const radius = 2 + (fieldParameters?.timeSync || 1) * 0.5;
+                return (
+                  <mesh 
+                    key={i}
+                    position={[
+                      Math.cos(angle) * radius,
+                      Math.sin(angle * 2) * 0.5,
+                      Math.sin(angle) * radius
+                    ]}
+                  >
+                    <boxGeometry args={[0.1, 0.1, 0.1]} />
+                    <meshBasicMaterial 
+                      color={`hsl(${300 + i * 30}, 80%, 70%)`}
+                    />
+                  </mesh>
+                );
+              })}
+
+              {/* Field lines that respond to EM Field Torsion */}
+              {Array.from({ length: Math.floor(2 + (fieldParameters?.emFieldTorsion || 1) * 3) }, (_, i) => {
+                const radius = 1.5 + i * 0.5;
+                return (
+                  <mesh 
+                    key={`ring-${i}`}
+                    position={[0, 0, 0]}
+                    rotation={[Math.PI / 2, 0, i * Math.PI / 4]}
+                  >
+                    <ringGeometry args={[radius, radius + 0.05, 32]} />
+                    <meshBasicMaterial 
+                      color={`hsl(${120 + i * 60}, 60%, 50%)`}
+                      transparent
+                      opacity={0.6}
+                    />
+                  </mesh>
+                );
+              })}
             </group>
 
             {/* Basic orbit controls */}
